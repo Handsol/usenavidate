@@ -4,14 +4,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        pallette1: '#7469b6',
-        pallette2: '#AD88C6',
-        pallette3: '#E1AFD1',
-        pallette4: '#FFE6E6',
-        pallette5: '#FFFFFF',
-        pallette6: '#343434',
-        pallette7: '#454545',
-        pallette8: '#C05353'
+        palette1: '#7469b6',
+        palette2: '#AD88C6',
+        palette3: '#E1AFD1',
+        palette4: '#FFE6E6',
+        palette5: '#FFFFFF',
+        palette6: '#343434',
+        palette7: '#454545',
+        palette8: '#C05353'
       }
     }
   },
