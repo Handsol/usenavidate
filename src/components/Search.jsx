@@ -3,7 +3,7 @@ import searchIcon from '../assets/searchIcon.png';
 const Search = () => {
   return (
     // 큰 컨테이너
-    <div className="flex item-center justify-center h-[250px] max-w-[1200px] mx-auto">
+    <div className="flex item-center justify-center h-[250px] max-w-[1300px] mx-auto">
       <div className="flex flex-col h-full justify-center gap-4">
         {/* 검색창 */}
         <section className="flex w-[500px] h-[70px] mx-auto bg-palette5 justify-between items-center px-3 rounded-full">
