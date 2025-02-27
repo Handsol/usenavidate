@@ -15,7 +15,7 @@ const Router = () => {
       {/* Header 컴포넌트 전역 적용 */}
       <Header />
       {/* Header 높이만큼 여백 주기 */}
-      <div className="pt-16">
+      <div className="pt-20">
         <Routes>
           <Route path="/" element={<DateRoutePage />} />
           <Route path="/login" element={<LoginPage />} />
