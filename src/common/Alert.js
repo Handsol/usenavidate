@@ -65,7 +65,7 @@ export const AlertCheck = (
       title,
       text,
       showCancelButton: true,
-      confirmButtonColor: '#504ba1',
+      confirmButtonColor: '#7469b6',
       cancelButtonColor: '#CD2E57',
       confirmButtonText
     }).then((result) => {
