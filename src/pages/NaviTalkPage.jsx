@@ -1,4 +1,4 @@
-import NavitalkPost from '../components/NaviTalkPost';
+import NaviTalkPost from '../components/NaviTalkPost';
 import PostList from '../components/PostList';
 import Search from '../components/Search';
 
@@ -7,7 +7,7 @@ const NaviTalkPage = () => {
     <div className="flex-col h-[100vh] max-w-[1300px] mx-auto bg-palette4">
       <Search />
       <PostList>
-        <NavitalkPost />
+        <NaviTalkPost />
       </PostList>
     </div>
   );
