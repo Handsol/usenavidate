@@ -3,6 +3,10 @@ export default {
   content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
+      fontFamily: {
+        montserrat: ['Montserrat', 'sans-serif'],
+        noto: ['Noto Sans KR', 'sans-serif']
+      },
       colors: {
         palette1: '#7469b6',
         palette2: '#ad88c6',
