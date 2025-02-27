@@ -1,5 +1,5 @@
-const CommunityPage = () => {
-  return <div>CommunityPage</div>;
+const NaviTalkPage = () => {
+  return <div>NaviTalkPage</div>;
 };
 
-export default CommunityPage;
+export default NaviTalkPage;
