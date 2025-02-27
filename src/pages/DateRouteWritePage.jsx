@@ -1,9 +1,9 @@
 // DateRoutePage.jsx
 import { Map } from 'react-kakao-maps-sdk';
 // 작성했던 Kakao 스크립트 로더 컴포넌트 import
-import UseKakaoLoader from '../../components/UseKakaoLoader';
+import UseKakaoLoader from '../components/UseKakaoLoader';
 
-const DateRouteDetail = () => {
+const DateRouteWritePage = () => {
   return (
     <div className="relative h-screen">
       <div className="absolute  left-1/2 top-1/3 transform -translate-x-1/2 -translate-y-[60%] w-full max-w-4xl">
@@ -14,4 +14,4 @@ const DateRouteDetail = () => {
   );
 };
 
-export default DateRouteDetail;
+export default DateRouteWritePage;
