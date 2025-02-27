@@ -5,13 +5,13 @@ export default {
     extend: {
       colors: {
         palette1: '#7469b6',
-        palette2: '#AD88C6',
-        palette3: '#E1AFD1',
-        palette4: '#FFE6E6',
-        palette5: '#FFFFFF',
+        palette2: '#ad88c6',
+        palette3: '#e1afd1',
+        palette4: '#ffe6e6',
+        palette5: '#ffffff',
         palette6: '#343434',
         palette7: '#454545',
-        palette8: '#C05353'
+        palette8: '#c05353'
       }
     }
   },
