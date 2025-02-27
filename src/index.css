@@ -5,6 +5,7 @@
 @layer base {
   html {
     font-family: 'Montserrat', 'Noto Sans KR', sans-serif;
+    background-color: #ffe6e6;
   }
 }
 
