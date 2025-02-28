@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import naviDateLogo_purple from '../../assets/naviDateLogo_purple.png';
+import naviDateLogo_purple from '../../../public/naviDateLogo_purple.png';
 import { IoClose } from 'react-icons/io5';
 
 const Header = () => {
