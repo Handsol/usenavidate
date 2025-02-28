@@ -23,12 +23,12 @@ const Router = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/mypage" element={<MyPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
           <Route path="/datedetail" element={<DateRouteDetail />} />
           <Route path="/writepost" element={<WritePostPage />} />
           <Route path="/navitalk" element={<NaviTalkPage />} />
           <Route path="/navitalkdetail" element={<NaviTalkDetail />} />
           <Route path="/datewrite" element={<DateRouteWritePage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </div>
     </BrowserRouter>
