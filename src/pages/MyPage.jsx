@@ -36,10 +36,10 @@ const MyPage = () => {
         <div className="flex flex-shrink-0 justify-center gap-12 pt-2 mt-2">
           {userData.map((item) => (
             <div className="bg-palette5 self-center w-10% h-10% p-2 rounded-2xl" key={item.user_id}>
-              <div className="text-lg">{item.email}</div>
-              <div className="text-xs">{item.nickname}</div>
+              <div className="text-lg">{item.users_email}</div>
+              <div className="text-xs">{item.users_nickname}</div>
               <div className="bg-cover overflow-hidden h-40">
-                <img src={item.avatar} className="w-[200px]" alt="..." />
+                <img src={item.users_avatar} className="w-[200px]" alt="..." />
               </div>
             </div>
           ))}
