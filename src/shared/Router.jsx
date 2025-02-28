@@ -7,6 +7,7 @@ import DateRouteDetail from '../pages/detail/DateRouteDetail';
 import WritePostPage from '../pages/WritePostPage';
 import NaviTalkPage from '../pages/NaviTalkPage';
 import NaviTalkDetail from '../pages/detail/NaviTalkDetail';
+import DateRouteWritePage from '../pages/DateRouteWritePage';
 
 const Router = () => {
   return (
@@ -20,6 +21,7 @@ const Router = () => {
         <Route path="/writepost" element={<WritePostPage />} />
         <Route path="/navitalk" element={<NaviTalkPage />} />
         <Route path="/navitalkdetail" element={<NaviTalkDetail />} />
+        <Route path="/datewrite" element={<DateRouteWritePage />} />
       </Routes>
     </BrowserRouter>
   );
