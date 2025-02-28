@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import naviDateLogo_purple from '../../../public/naviDateLogo_purple.png';
+import naviDateLogo from '/navi_date_purple.png';
 import { IoClose } from 'react-icons/io5';
 
 const Header = () => {
@@ -17,7 +17,7 @@ const Header = () => {
 
         {/* useNaviDate() 로고, 클릭 시 홈 화면으로 이동 */}
         <div className="text-2xl font-bold flex items-center">
-          <img src={naviDateLogo_purple} alt="로고" className="w-10 h-10 mr-1" />
+          <img src={naviDateLogo} alt="로고" className="w-10 h-10 mr-1" />
           <Link to="/">useNaviDate()</Link>
         </div>
 
