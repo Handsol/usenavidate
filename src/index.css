@@ -2,6 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  background-color: #ffe6e6;
+@layer base {
+  html {
+    font-family: 'Montserrat', 'Noto Sans KR', sans-serif;
+    background-color: #ffe6e6;
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+ul,
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
 }
