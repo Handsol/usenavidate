@@ -1,66 +1,92 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const WritePostPage = () => {
   const [marketName, setMarketName] = useState('');
   const [address, setAddress] = useState('');
   const [rating, setRating] = useState('');
   const [description, setDescription] = useState('');
-  const [image, setImage] = useState('');
-
-  const postSubmit = (e) => {
-    e.preventDefault();
-    console.log('가게이름 =>', marketName);
-    console.log('주소 =>', address);
-    console.log('별점 =>', rating);
-    console.log('상세설명 =>', description);
-    setMarketName('');
-    setAddress('');
-    setRating('');
-    setDescription('');
-  };
+  const [image, setImage] = useState(null);
+  const [images, setImages] = useState([null, null, null, null]);
+  const [isChange, setIsChange] = useState(false);
 
   const postImage = (e) => {
+    e.preventDefault();
     const file = e.target.files[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setImage(imageUrl);
+      setIsChange(true);
+    }
+  }
+
+  const removeImage = (e) => {
+    e.preventDefault();
+    setImage(null);
+    setIsChange(false);
+  }
+
+  const postMultipleImages = (e, index) => {
+
+    const file = e.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file); // 파일 URL 생성
+      const newImages = [...images];
+      newImages[index] = imageUrl; // 해당 인덱스의 이미지 URL 업데이트
+      setImages(newImages); // 상태 업데이트
+      setIsChange(true);
     }
   };
 
-  useEffect(() => {
-    return () => {
-      if (image) URL.revokeObjectURL(image);
-    };
-  }, [image]);
+  // 이미지 삭제 함수
+  const removeMultipleImage = (index) => {
+    const newImages = [...images];
+    newImages[index] = null; // 해당 인덱스의 이미지를 null로 설정
+    setImages(newImages); // 상태 업데이트
+  };
+
+
   return (
     <div className="w-full bg-palette4 flex flex-col justify-center items-center h-dvh">
-      <form onSubmit={postSubmit} className="flex flex-row gap-10 bg-[#fdf9e1] p-6 rounded-xl shadow-xl">
+      <form className="flex flex-row gap-10 bg-[#fdf9e1] p-6 rounded-xl shadow-xl">
         <section className="flex flex-col items-center">
           <label className="flex flex-col mb-4 text-palette2 font-bold text-[20px]">
             사진
-            <div
-              className={`bg-white w-[400px] h-[400px] rounded-xl bg-no-repeat bg-center ${
-                image ? : `bg-[url('./assets/img-plus.png')]`
-              }`}
-            ></div>
-            <div className="flex flex-row justify-around mt-4">
-              <div className="w-[90px] h-[90px] bg-white rounded-xl bg-[url('./assets/img-plus.png')] bg-no-repeat bg-center bg-[length:34px_34px]"></div>
-              <div className="w-[90px] h-[90px] bg-white rounded-xl bg-[url('./assets/img-plus.png')] bg-no-repeat bg-center bg-[length:34px_34px]"></div>
-              <div className="w-[90px] h-[90px] bg-white rounded-xl bg-[url('./assets/img-plus.png')] bg-no-repeat bg-center bg-[length:34px_34px]"></div>
-              <div className="w-[90px] h-[90px] bg-white rounded-xl bg-[url('./assets/img-plus.png')] bg-no-repeat bg-center bg-[length:34px_34px]"></div>
-            </div>
+            {isChange && image ? (
+              <div className='relative'>
+                <img src={image} alt="" className="bg-white w-[400px] h-[400px] rounded-xl bg-no-repeat bg-center" onClick={() => setIsChange(false)} />
+                <button type='button' onClick={removeImage} className='absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 text-[13px]'>X</button>
+              </div>
+            ) : (
+              <input type="file" className="bg-white cursor-pointer w-[400px] h-[400px] rounded-xl bg-no-repeat bg-center bg-[url('./assets/img-plus.png')]
+                                            file:border-none file:bg-inherit file:text-transparent
+                                            file:w-full file:px-0 file:cursor-pointer"
+                onChange={postImage} />
+            )}
           </label>
-          <div className="flex flex-row gap-2">
-            <input
-              type="file"
-              className="bg-inherit border-4 border-white rounded-lg text-transparent cursor-pointer flex-1 w-1/2 p-1
-                        file:border-none file:bg-inherit file:text-palette2 file:font-bold file:text-[20px]
-                        file:w-full file:px-0 file:cursor-pointer"
-              onChange={postImage}
-            />
-            <button className="bg-inherit border-4 border-white rounded-lg cursor-pointer flex-1 w-1/2 p-1 text-palette2 font-bold text-[20px]">
-              파일 제거
-            </button>
+          <div className="flex flex-row gap-3 mt-4">
+            {images.map((img, index) => (
+              <div key={index} className="relative w-[90px] h-[90px] cursor-pointer bg-white rounded-xl bg-[url('./assets/img-plus.png')] bg-no-repeat bg-center bg-[length:34px_34px]" >
+                {img ? (
+                  <>
+                    <img src={img} alt={`image-${index}`} className='w-full h-full object-cover rounded-xl' onChange={() => setIsChange(false)} />
+                    <button type='button'
+                      onClick={() => removeMultipleImage(index)}
+                      className='absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 text-[13px]'>
+                      X
+                    </button>
+                  </>
+                ) : (
+                  <label className='w-full h-full cursor-pointer'>
+                    <input type="file"
+                      className='w-full h-full opacity-0 file:border-none file:bg-inherit file:text-transparent
+                             file:w-full file:px-0 file:cursor-pointer cursor-pointer'
+                      onChange={(e) => postMultipleImages(e, index)} />
+                    <div className="w-full h-full bg-no-repeat bg-center bg-cover rounded-xl cursor-pointer"></div>
+                  </label>
+                )
+                }
+              </div>
+            ))}
           </div>
         </section>
         <section className="flex flex-col gap-7">
