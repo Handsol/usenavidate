@@ -8,6 +8,7 @@ import WritePostPage from '../pages/WritePostPage';
 import NaviTalkPage from '../pages/NaviTalkPage';
 import NaviTalkDetail from '../pages/detail/NaviTalkDetail';
 import DateRouteWritePage from '../pages/DateRouteWritePage';
+import ProfilePage from '../pages/ProfilePage';
 
 const Router = () => {
   return (
@@ -17,6 +18,7 @@ const Router = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/mypage" element={<MyPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
         <Route path="/datedetail" element={<DateRouteDetail />} />
         <Route path="/writepost" element={<WritePostPage />} />
         <Route path="/navitalk" element={<NaviTalkPage />} />
