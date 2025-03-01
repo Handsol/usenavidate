@@ -9,6 +9,7 @@ import WritePostPage from '../pages/WritePostPage';
 import NaviTalkPage from '../pages/NaviTalkPage';
 import NaviTalkDetail from '../pages/detail/NaviTalkDetail';
 import DateRouteWritePage from '../pages/DateRouteWritePage';
+import ProfilePage from '../pages/ProfilePage';
 
 const Router = () => {
   return (
@@ -27,6 +28,7 @@ const Router = () => {
           <Route path="/navitalk" element={<NaviTalkPage />} />
           <Route path="/navitalkdetail" element={<NaviTalkDetail />} />
           <Route path="/datewrite" element={<DateRouteWritePage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </div>
     </BrowserRouter>
