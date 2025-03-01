@@ -5,10 +5,9 @@ const useAuthStore = create(
   persist(
     (set) => ({
       isAuthenticated: false,
-      userData: [],
-      userLogin: (user) => set((state) => ({ userData: state.user }, { isAuthenticated: true })),
-      userLogout: () => set((state) => ({ userData: state.null }, { isAuthenticated: false })),
-      setIsAuthenticated: (value) => set({ isAuthenticated: value })
+      userData: null,
+      userLogin: (user) => set((state) => ({ userData: user, isAuthenticated: true })),
+      userLogout: () => set({ userData: null, isAuthenticated: false })
     }),
     {
       name: 'authenticatedState'
