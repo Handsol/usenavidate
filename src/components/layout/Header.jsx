@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import naviDateLogo from '/navi_date_purple.png';
 import { IoClose } from 'react-icons/io5';
+import { PATH } from '../../shared/PATH';
 
 const Header = () => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
-
   return (
     // Header
     <nav className="fixed top-0 w-full bg-white text-palette1 z-50">
@@ -18,12 +18,12 @@ const Header = () => {
         {/* useNaviDate() 로고, 클릭 시 홈 화면으로 이동 */}
         <div className="text-2xl font-bold flex items-center">
           <img src={naviDateLogo} alt="로고" className="w-10 h-10 mr-1" />
-          <Link to="/">useNaviDate()</Link>
+          <Link to={PATH.HOME}>useNaviDate()</Link>
         </div>
 
         {/* Login 버튼 */}
         <Link
-          to="/login"
+          to={PATH.LOGIN}
           className="bg-palette3 hover:bg-palette1 w-20 h-8 flex items-center justify-center rounded-2xl text-palette1 text-lg font-semibold font-montserrat hover:text-palette3 transition-all duration-300"
         >
           Login
@@ -46,21 +46,21 @@ const Header = () => {
           {/* 햄부기우기는 어디로 갈 수 있나요? */}
           <nav className="mt-24 ml-8 flex flex-col items-start gap-5">
             <Link
-              to="/"
+              to={PATH.HOME}
               className="text-white text-xl font-semibold tracking-wide hover:text-palette3 transition-all duration-300"
               onClick={() => setIsHamburgerOpen(false)}
             >
               useNaviDate( )
             </Link>
             <Link
-              to="/navitalk"
+              to={PATH.NAVITALK}
               className="text-white text-xl font-semibold tracking-wide hover:text-palette3 transition-all duration-300"
               onClick={() => setIsHamburgerOpen(false)}
             >
               NaviTalk
             </Link>
             <Link
-              to="/mypage"
+              to={PATH.MYPAGE}
               className="text-white text-xl font-semibold tracking-wide hover:text-palette3 transition-all duration-300"
               onClick={() => setIsHamburgerOpen(false)}
             >
