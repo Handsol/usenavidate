@@ -61,7 +61,7 @@ const DateRouteWritePage = () => {
     }
 
     try {
-      // Step 1. posts 테이블에 데이터 저장
+      //posts 테이블에 데이터 저장
       const { data: postData, error: postError } = await supabase
         .from('posts')
         .insert([
@@ -84,7 +84,7 @@ const DateRouteWritePage = () => {
         return;
       }
 
-      // Step 2. posts_locations 테이블에 장소 정보 저장
+      // posts_locations 테이블에 장소 정보 저장
       const locationData = places.map((place) => ({
         posts_id: postId,
         posts_location_url: place.address // 주소를 posts_location_url 컬럼에 저장
@@ -123,7 +123,17 @@ const DateRouteWritePage = () => {
             setMarkers((prev) => [...prev, currentPos]);
             // 주소 값 받아오기
             setPlaces((prev) => [...prev, currentPos]);
-            // 검색된 주소를 입력창에 표시
+            // 새로운 주소 값이 입력될 때마다 모든 마커가 보이도록 자동 조정
+            if (mapInstance) {
+              const bounds = new window.kakao.maps.LatLngBounds();
+              [...markers, currentPos].forEach((marker) => {
+                bounds.extend(new window.kakao.maps.LatLng(marker.lat, marker.lng));
+              });
+
+              //모든 마커가 보이도록 자동 조정
+              mapInstance.setBounds(bounds);
+            }
+
             setSearchQuery('');
           } else {
             alert('주소를 찾을 수 없습니다.');
