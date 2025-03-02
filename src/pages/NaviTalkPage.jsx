@@ -50,7 +50,7 @@ const NaviTalkPage = () => {
       const formattedPosts = postsData.map((post) => {
         return {
           ...post,
-          posts_img_url: photosData?.find((photo) => photo.posts_id === post.posts_id)?.posts_img_url || '',
+          posts_img_url: photosData?.find((photo) => photo.posts_id === post.posts_id)?.posts_img_url || null,
           users_nickname: usersData?.find((user) => user.users_id === post.users_id)?.users_nickname || '닉네임 없음'
         };
       });
