@@ -8,9 +8,9 @@ const App = () => {
   // const userLogout = useAuthStore((state) => state.userLogout);
 
   return (
-    <div>
+    <>
       <Router />
-    </div>
+    </>
   );
 };
 
