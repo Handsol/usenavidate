@@ -11,6 +11,12 @@ const DateRouteWritePage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   // Kakao Maps SDK가 로드되었는지 여부 확인
   const [isKakaoLoaded, setIsKakaoLoaded] = useState(false);
+  // 선택한 장소 목록
+  const [places, setPlaces] = useState([]);
+  // 데이트 코스 제목
+  const [dateTitle, setDateTitle] = useState('');
+  // 데이트 코스 설명 상태
+  const [description, setDescription] = useState('');
 
   const checkKakaoLoaded = () => {
     // window.kakao와 그 안의 maps가 존재하는지 확인
@@ -30,9 +36,12 @@ const DateRouteWritePage = () => {
   const onCreateMap = (map) => {
     setMapInstance(map);
   };
-
+  // 주소 목록 지우기 핸들러
+  const handleDeleteAddrList = (indexToDelete) => {
+    setPlaces((prev) => prev.filter((_, i) => i !== indexToDelete));
+  };
   // 주소 검색 버튼, 입력창 클릭하면 호출
-  const onClickAddr = () => {
+  const handleSearchAddr = () => {
     if (!isKakaoLoaded) {
       alert('Kakao Maps API가 아직 로드되지 않았습니다.');
       return;
@@ -45,15 +54,17 @@ const DateRouteWritePage = () => {
           if (status === window.kakao.maps.services.Status.OK) {
             const lat = parseFloat(result[0].y); // 위도
             const lng = parseFloat(result[0].x); // 경도
-            const currentPos = { lat, lng };
+            const currentPos = { lat, lng, address: addrData.address };
             // 지도 인스턴스가 있다면, panTo 메서드로 해당 좌표로 지도 중심 이동
             if (mapInstance) {
               mapInstance.panTo(new window.kakao.maps.LatLng(lat, lng));
             }
             // 변환된 좌표에 마커 추가
             setMarkers((prev) => [...prev, currentPos]);
+            // 주소 값 받아오기
+            setPlaces((prev) => [...prev, currentPos]);
             // 검색된 주소를 입력창에 표시
-            setSearchQuery(addrData.address);
+            setSearchQuery('');
           } else {
             alert('주소를 찾을 수 없습니다.');
           }
@@ -62,32 +73,47 @@ const DateRouteWritePage = () => {
     }).open(); // 주소 검색 팝업 열기
   };
   return (
-    <div className="w-3/4 h-screen flex justify-center items-center ">
-      <UseKakaoLoader />
-      <div className="mb-4 flex items-center">
-        <input
-          type="text"
-          value={searchQuery}
-          readOnly
-          placeholder="검색된 주소가 여기에 표시됩니다."
-          className="border p-2 w-64 cursor-pointer"
-          onClick={onClickAddr}
-        />
-        <button onClick={onClickAddr} className="ml-2 p-2 bg-blue-500 text-white">
-          주소 검색
-        </button>
+    <div className="w-full h-screen flex">
+      <div className="w-1/3 p-4">
+        <UseKakaoLoader />
+        <div className="mb-4 flex items-center">
+          <input
+            type="text"
+            value={searchQuery}
+            placeholder="주소를 입력해주세요."
+            className="border p-2 w-64 cursor-pointer "
+            onClick={handleSearchAddr}
+          />
+        </div>
+        {/* 선택한 장소 목록 보여주기 */}
+        <div className="mt-4 h-full overflow-y-auto">
+          {places.length === 0 ? (
+            <p>선택된 장소가 없습니다.</p>
+          ) : (
+            places.map((place, index) => (
+              <div key={index} className="flex justify-between items-center border border-palette2 p-3 mt-2 rounded-lg">
+                <span>{place.address}</span>
+                <button onClick={() => handleDeleteAddrList(index)} className="text-palette8 text-lg">
+                  삭제
+                </button>
+              </div>
+            ))
+          )}
+        </div>
       </div>
-      <Map
-        id="map"
-        center={{ lat: 33.450701, lng: 126.570667 }}
-        className="w-full h-full"
-        level={3}
-        onCreate={onCreateMap}
-      >
-        {markers.map((marker, index) => (
-          <MapMarker key={index} position={{ lat: marker.lat, lng: marker.lng }} />
-        ))}
-      </Map>
+      <div className="w-2/3 h-full">
+        <Map
+          id="map"
+          center={{ lat: 33.450701, lng: 126.570667 }}
+          className="w-full h-full"
+          level={3}
+          onCreate={onCreateMap}
+        >
+          {markers.map((marker, index) => (
+            <MapMarker key={index} position={{ lat: marker.lat, lng: marker.lng }} />
+          ))}
+        </Map>
+      </div>
     </div>
   );
 };

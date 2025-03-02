@@ -9,6 +9,8 @@ import WritePostPage from '../pages/WritePostPage';
 import NaviTalkPage from '../pages/NaviTalkPage';
 import NaviTalkDetail from '../pages/detail/NaviTalkDetail';
 import DateRouteWritePage from '../pages/DateRouteWritePage';
+import ProfilePage from '../pages/ProfilePage';
+import { PATH } from './PATH';
 
 const Router = () => {
   return (
@@ -18,15 +20,16 @@ const Router = () => {
       {/* Header 높이만큼 여백 주기 */}
       <div className="pt-20">
         <Routes>
-          <Route path="/" element={<DateRoutePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/mypage" element={<MyPage />} />
-          <Route path="/datedetail" element={<DateRouteDetail />} />
-          <Route path="/writepost" element={<WritePostPage />} />
-          <Route path="/navitalk" element={<NaviTalkPage />} />
-          <Route path="/navitalkdetail" element={<NaviTalkDetail />} />
-          <Route path="/datewrite" element={<DateRouteWritePage />} />
+          <Route path={PATH.HOME} element={<DateRoutePage />} />
+          <Route path={PATH.LOGIN} element={<LoginPage />} />
+          <Route path={PATH.SIGNUP} element={<SignupPage />} />
+          <Route path={PATH.MYPAGE} element={<MyPage />} />
+          <Route path={PATH.DATEDETAIL} element={<DateRouteDetail />} />
+          <Route path={PATH.WRITEPOST} element={<WritePostPage />} />
+          <Route path={PATH.NAVITALK} element={<NaviTalkPage />} />
+          <Route path={PATH.NAVITALKDETAIL} element={<NaviTalkDetail />} />
+          <Route path={PATH.DATEWRITE} element={<DateRouteWritePage />} />
+          <Route path={PATH.PROFILE} element={<ProfilePage />} />
         </Routes>
       </div>
     </BrowserRouter>
