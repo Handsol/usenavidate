@@ -4,7 +4,7 @@ import { PATH } from '../shared/PATH';
 
 const LoginPage = () => {
   return (
-    <div className="flex h-screen p-24 pl-60 gap-28">
+    <div className="flex justify-center h-screen p-20 pt-36 gap-14">
       {/* 그래디언트 박스 : 반응형 너비에서는 숨김처리했습니다 */}
       <div className="hidden justify-center items-center lg:flex w-[600px] relative">
         <div className="absolute inset-0 bg-[conic-gradient(from_345deg,_#ecb3da,_#ecb0d8,_#e0a1cc,_#db9ec8,_#d18abb,_#986bb6,_#7469b6,_#8b7fce,_#b6abf7,_#d0c4ff,_#fff8f8,_#ffe6e6,_#ffd1dd,_#fabad5,_#ecb3da)]"></div>
@@ -33,7 +33,7 @@ const LoginPage = () => {
             <input
               type="email"
               placeholder="이메일을 입력해주세요."
-              className="px-4 py-2 border-white border-4 bg-palette4 rounded-xl placeholder:text-white placeholder:font-light"
+              className="px-4 py-2 border-white border-4 bg-palette4 rounded-xl placeholder:text-white placeholder:font-light focus:ring-0 outline-none focus:bg-palette5 hover:bg-palette5 hover:bg-opacity-50 transition-all duration-300"
             />
           </div>
           {/* 비밀번호 입력창 */}
@@ -42,7 +42,7 @@ const LoginPage = () => {
             <input
               type="password"
               placeholder="비밀번호를 입력해주세요."
-              className="px-4 py-2 border-white border-4 bg-palette4 rounded-xl placeholder:text-white placeholder:font-light"
+              className="px-4 py-2 border-white border-4 bg-palette4 rounded-xl placeholder:text-white placeholder:font-light focus:ring-0 outline-none focus:bg-palette5 hover:bg-palette5 hover:bg-opacity-50 transition-all duration-300"
             />
           </div>
           {/* 로그인 버튼 */}
