@@ -32,14 +32,19 @@ export const ImageInput = () => {
       </label>
       {/* 업로드한 이미지가 존재할 때 이미지 미리보기 생성 */}
       {showImage !== null ? (
-        <div className="bg-cover w-10% h-10%">
+        <div className="bg-cover w-80 h-80">
           <img src={showImage} />
           {/* <button onClick={() => handleDeleteImage()}>삭제</button> */}
-          <button onClick={() => handleUploadImage()}>업로드</button>
+          <button
+            onClick={() => handleUploadImage()}
+            className="text-center bg-palette1 text-palette5 items-center w-full rounded-full px-20 py-2 mt-20"
+          >
+            업로드
+          </button>
         </div>
       ) : (
         // 기본 아바타 이미지
-        <div className="bg-cover w-10% h-10%">
+        <div className="bg-cover w-80 h-80">
           <img
             src={
               'https://yaaahfifliqyixbtxbjn.supabase.co/storage/v1/object/public/profile-images//default-profile.jpg'
