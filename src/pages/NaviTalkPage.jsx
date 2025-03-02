@@ -12,6 +12,7 @@ const NaviTalkPage = () => {
       const { data: postsData, error: postsError } = await supabase
         .from('posts')
         .select('*')
+        .eq('board_type', 'navitalk')
         .order('created_at', { ascending: false });
 
       if (postsError || !postsData) {
