@@ -2,9 +2,14 @@ import { useEffect, useState } from 'react';
 import PostList from '../components/PostList';
 import Search from '../components/Search';
 import supabase from '../supabase/Client';
+import { useLocation } from 'react-router-dom';
 
 const NaviTalkPage = () => {
   const [posts, setPosts] = useState([]);
+  const location = useLocation();
+
+  // 현재 접속한 경로를 기반으로 boardType을 가져옴
+  const boardType = location.pathname.includes('navitalk') ? 'navitalk' : '';
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -64,7 +69,7 @@ const NaviTalkPage = () => {
   return (
     <div className="flex-col h-[100vh] max-w-[1300px] mx-auto bg-palette4">
       <Search />
-      <PostList posts={posts} />
+      <PostList posts={posts} boardType={boardType} />
     </div>
   );
 };
