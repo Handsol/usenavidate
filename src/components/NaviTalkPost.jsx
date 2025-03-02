@@ -7,7 +7,7 @@ const NaviTalkPost = ({ post }) => {
   };
 
   return (
-    <div onClick={onClick} className="relative h-[250px] rounded-3xl overflow-hidden">
+    <div onClick={onClick} className="relative h-[250px] rounded-3xl overflow-hidden cursor-pointer">
       <img className="absolute inset-0 w-full h-full object-cover items-center" src={post.posts_img_url} alt="이미지" />
       <section className="absolute bottom-0 w-full h-[100px] flex-col gap-3 bg-palette5">
         <div className="flex flex-row w-full h-[50%] items-center justify-between px-2">
