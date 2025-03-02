@@ -1,44 +1,52 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import supabase from '../supabase/Client';
 
 export const ImageInput = () => {
-  const [showImages, setShowImages] = useState([]);
+  const [showImage, setShowImage] = useState(null);
+  const [uploadAvatar, setUploadAvatar] = useState('');
+  const [publicUrl, setPublicUrl] = useState('');
+  const fileInputRef = useRef(null);
 
-  // 이미지 상대경로 저장
-  const handleAddImages = (e) => {
-    const imageLists = e.target.files;
-    let imageUrlLists = [...showImages];
-
-    for (let i = 0; i < imageLists.length; i++) {
-      const currentImageUrl = URL.createObjectURL(imageLists[i]);
-      imageUrlLists.push(currentImageUrl);
-    }
-
-    if (imageUrlLists.length > 5) {
-      imageUrlLists = imageUrlLists.slice(0, 5);
-    }
-
-    setShowImages(imageUrlLists);
+  const handleAddImage = async (e) => {
+    const avatar_image = e.target.files[0];
+    const currentImageUrl = URL.createObjectURL(avatar_image);
+    setShowImage(currentImageUrl);
+    setUploadAvatar(avatar_image);
   };
 
-  // X버튼 클릭 시 이미지 삭제
-  const handleDeleteImage = (id) => {
-    setShowImages(showImages.filter((_, index) => index !== id));
+  const handleUploadImage = async () => {
+    const { data, error } = await supabase.storage
+      .from('profile-images')
+      .upload(`public/avatar/${crypto.randomUUID()}`, uploadAvatar);
+
+    setPublicUrl(`https://yaaahfifliqyixbtxbjn.supabase.co/storage/v1/object/public/profile-images//${data.path}`);
   };
 
   return (
     <div>
-      <label htmlFor="input-file" className="addImage" onChange={handleAddImages}>
-        <input type="file" id="input-file" multiple className="addImage" />
+      {/* 이미지 업로드하기 */}
+      <label htmlFor="input-file" className="addImage" onChange={handleAddImage}>
+        <input type="file" ref={fileInputRef} />
         <div className="bg-slate-300" />
         <span>사진추가</span>
       </label>
-      {/* 저장해둔 이미지들을 순회하면서 화면에 이미지 출력 */}
-      {showImages.map((image, id) => (
-        <div key={id}>
-          <img src={image} alt={`${image}-${id}`} />
-          <button onClick={() => handleDeleteImage(id)}>삭제</button>
+      {/* 업로드한 이미지가 존재할 때 이미지 미리보기 생성 */}
+      {showImage !== null ? (
+        <div className="bg-cover w-10% h-10%">
+          <img src={showImage} />
+          {/* <button onClick={() => handleDeleteImage()}>삭제</button> */}
+          <button onClick={() => handleUploadImage()}>업로드</button>
         </div>
-      ))}
+      ) : (
+        // 기본 아바타 이미지
+        <div className="bg-cover w-10% h-10%">
+          <img
+            src={
+              'https://yaaahfifliqyixbtxbjn.supabase.co/storage/v1/object/public/profile-images//default-profile.jpg'
+            }
+          />
+        </div>
+      )}
     </div>
   );
 };
