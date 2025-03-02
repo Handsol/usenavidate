@@ -23,8 +23,8 @@ const Header = () => {
 
         {/* Login 버튼 */}
         <Link
-          to="/login"
-          className="bg-palette1 hover:bg-palette3 w-20 h-8 flex items-center justify-center rounded-2xl text-white text-lg font-semibold font-montserrat transition-all duration-300"
+          to={PATH.LOGIN}
+          className="bg-palette1 hover:bg-palette3 w-20 h-8 flex items-center justify-center rounded-2xl text-palette5 text-lg font-semibold font-montserrat transition-all duration-300"
         >
           Login
         </Link>
