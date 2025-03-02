@@ -6,7 +6,7 @@ const Search = () => {
     <div className="flex item-center justify-center h-[250px] max-w-[1300px] mx-auto">
       <div className="flex flex-col h-full justify-center gap-4">
         {/* 검색창 */}
-        <section className="flex w-[500px] h-[70px] mx-auto bg-palette5 justify-between items-center px-3 rounded-full">
+        <section className="flex w-[500px] h-[55px] mx-auto bg-palette5 justify-between items-center px-3 rounded-full">
           <input
             type="text"
             placeholder="어디 갈 지 생각도 안하고 왔단 말이야..?"
