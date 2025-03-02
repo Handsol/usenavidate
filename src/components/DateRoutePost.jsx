@@ -17,7 +17,7 @@ const DateRoutePost = ({ post }) => {
               )}
             </ul>
           </div>
-          <div className="flex text-lg font-semibold flex-shrink-0">{post.posts_value}</div>
+          <div className="flex text-lg font-semibold flex-shrink-0 text-palette8">{post.posts_value}만원대</div>
         </div>
       </section>
     </div>
