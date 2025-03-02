@@ -23,17 +23,16 @@ const Header = () => {
 
         {/* Login 버튼 */}
         <Link
-          to={PATH.LOGIN}
-          className="bg-palette3 hover:bg-palette1 w-20 h-8 flex items-center justify-center rounded-2xl text-palette1 text-lg font-semibold font-montserrat hover:text-palette3 transition-all duration-300"
+          to="/login"
+          className="bg-palette1 hover:bg-palette3 w-20 h-8 flex items-center justify-center rounded-2xl text-white text-lg font-semibold font-montserrat transition-all duration-300"
         >
           Login
         </Link>
 
         {/* 햄부기우기 네비게이션 바 */}
         <div
-          className={`fixed left-0 top-0 h-full w-64 bg-palette1  transform transition-transform duration-300 ${
-            isHamburgerOpen ? 'translate-x-0' : '-translate-x-full'
-          }`}
+          className={`fixed left-0 top-0 h-full w-64 bg-palette1  transform transition-transform duration-300 ${isHamburgerOpen ? 'translate-x-0' : '-translate-x-full'
+            }`}
         >
           {/* 햄부기우기 닫기 */}
           <button
