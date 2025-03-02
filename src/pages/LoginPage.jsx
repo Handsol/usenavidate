@@ -1,5 +1,6 @@
 import { FcGoogle } from 'react-icons/fc';
 import { Link } from 'react-router-dom';
+import { PATH } from '../shared/PATH';
 
 const LoginPage = () => {
   return (
@@ -55,7 +56,7 @@ const LoginPage = () => {
           <div className="flex gap-8 mt-6 justify-center items-center">
             <p className="text-palette1 text-md">계정이 없으신가요?</p>
             <Link
-              to="/signup"
+              to={PATH.SIGNUP}
               className="h-8 flex justify-center items-center bg-palette1 text-white text-sm font-medium px-3 rounded-2xl transition-all duration-300 hover:bg-palette3"
             >
               Sign Up
