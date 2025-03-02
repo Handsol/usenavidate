@@ -22,8 +22,11 @@ const Router = () => {
   );
 };
 
+// Header 높이만큼의 padding 값이 필요없는 경우에 대한 처리
 const RouterContents = () => {
   const location = useLocation();
+
+  // 상단의 패딩값(헤더 높이만큼 pt-20 적용됨) 이 필요 없는 페이지 리스트
   const fullScreenPages = [PATH.LOGIN, PATH.SIGNUP, PATH.MYPAGE];
 
   return (
