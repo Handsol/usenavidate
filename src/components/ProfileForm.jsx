@@ -4,43 +4,45 @@ import supabase from '../supabase/Client';
 const ProfileForm = () => {
   const [formData, setFormData] = useState({
     nickname: '',
-    id: '',
     password: ''
   });
 
-  // const getUserData = async () => {
-  //   const { data, error } = await supabase.from('users').select('*');
-  // };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    async (data) => {
-      try {
-        setFormData(data);
-        alert('수정 완료');
-      } catch (error) {
-        alert(error);
+    const updateUserData = async () => {
+      const { error } = await supabase.auth.updateUser(formData);
+      if (error) {
+        console.error('오류 발생', error);
+        alert('업데이트 오류');
+      } else {
+        alert('업데이트 완료');
+        setFormData({
+          nickname: '',
+          password: ''
+        });
       }
     };
+    updateUserData();
   };
-
-  // 업데이트 로직
-  // const { data, error } = await supabase
-  // .from('users')
-  // .update({ other_column: 'otherValue' })
-  // .eq('some_column', 'someValue')
-  // .select()
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-  console.log(formData);
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="flex flex-col text-palette6 w-full p-4">
         <div className="flex flex-col gap-3">
+          <label className="text-palette1 text-1xl font-semibold">ID</label>
+          <input
+            type="text"
+            name="id"
+            className="border-4 border-white rounded-lg bg-inherit p-2 placeholder-palette2"
+            placeholder="ID"
+            disabled
+          />
+          <span className="text-sm text-palette8">ID는 변경할 수 없습니다.</span>
           <label className="text-palette1 text-1xl font-semibold">Nickname</label>
           <input
             type="text"
@@ -48,15 +50,6 @@ const ProfileForm = () => {
             className="border-4 border-white rounded-lg bg-inherit p-2 placeholder-palette2"
             placeholder="닉네임"
             value={formData.nickname}
-            onChange={handleChange}
-          />
-          <label className="text-palette1 text-1xl font-semibold">ID</label>
-          <input
-            type="text"
-            name="id"
-            className="border-4 border-white rounded-lg bg-inherit p-2 placeholder-palette2"
-            placeholder="ID"
-            value={formData.id}
             onChange={handleChange}
           />
           <label className="text-palette1 text-1xl font-semibold">password</label>
