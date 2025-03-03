@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import supabase from '../supabase/Client';
 
 const ProfileForm = () => {
@@ -12,14 +11,28 @@ const ProfileForm = () => {
   const getUserData = async () => {
     const { data, error } = await supabase.from('users').select('*');
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    try {
+      alert('프로필 수정 완료');
+    } catch (error) {
+      alert(error);
+    }
   };
+
+  // 업데이트 로직
+  // const { data, error } = await supabase
+  // .from('users')
+  // .update({ other_column: 'otherValue' })
+  // .eq('some_column', 'someValue')
+  // .select()
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+  console.log(formData);
   return (
     <form onSubmit={handleSubmit}>
       <div className="flex flex-col text- text-palette6 w-full p-4">
