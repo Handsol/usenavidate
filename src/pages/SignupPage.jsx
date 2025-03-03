@@ -19,7 +19,7 @@ const SignupPage = () => {
     const { email, password, nickname } = data;
 
     // db(supabase) 에 회원가입 요청
-    const { user, error } = await supabase.auth.signUp({
+    const { data: userData, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -29,7 +29,10 @@ const SignupPage = () => {
       }
     });
 
+    console.log(userData, error);
+
     if (error) {
+      console.log(error);
       AlertError('회원가입 실패!', error.message);
       return;
     }
