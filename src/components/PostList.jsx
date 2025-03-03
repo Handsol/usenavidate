@@ -1,9 +1,16 @@
 import NaviTalkPost from './NaviTalkPost';
+import DateRoutePost from './DateRoutePost';
 
-const PostList = () => {
+const PostList = ({ posts, boardType }) => {
   return (
     <div className="w-[1300px] grid grid-cols-3 gap-10">
-      {/* Page에서 <PostList> 내부에 넣는 포스트들이 mapping 됩니다 */}
+      {posts.map((post) =>
+        boardType === 'navitalk' ? (
+          <NaviTalkPost key={post.posts_id} post={post} />
+        ) : (
+          <DateRoutePost key={post.posts_id} post={post} />
+        )
+      )}
     </div>
   );
 };
