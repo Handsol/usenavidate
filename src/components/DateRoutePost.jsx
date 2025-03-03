@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 const DateRoutePost = ({ post }) => {
   return (
     <Link
-      to={`${PATH.DATEWRITE}/${post.posts_id}`}
+      to={`${PATH.DATEDETAIL}/${post.posts_id}`}
       className="relative h-[250px] rounded-3xl overflow-hidden cursor-pointer"
     >
       <img className="absolute inset-0 w-full h-full object-cover items-center" src={post.posts_img_url} alt="이미지" />
