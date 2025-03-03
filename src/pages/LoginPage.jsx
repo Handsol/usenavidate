@@ -4,9 +4,13 @@ import { PATH } from '../shared/PATH';
 import supabase from '../supabase/Client';
 import { useForm } from 'react-hook-form';
 import { AlertError, AlertSuccess } from '../common/Alert';
+import useAuthStore from '../zustand/AuthStore';
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  // zustand authstore의 set 꺼내오기
+  const userLogin = useAuthStore((state) => state.userLogin);
+  const userLogout = useAuthStore((state) => state.userLogout);
 
   const {
     register,

@@ -8,11 +8,11 @@ const useAuthStore = create(
       // 인증되어있는지 확인
       isAuthenticated: false,
       //   supabase에서 userData를 받아 사용하는 용도
-      userData: null, // auth table 완성되면 해당 부분 수정 필요
+      data: null, // auth table 완성되면 해당 부분 수정 필요
       // 로그인 state 관리
-      userLogin: (user) => set({ userData: user, isAuthenticated: true }),
+      userLogin: (user) => set({ data: user, isAuthenticated: true }),
       // 로그아웃 state 관리
-      userLogout: () => set({ userData: null, isAuthenticated: false })
+      userLogout: () => set({ data: null, isAuthenticated: false })
     }),
     {
       name: 'authenticatedState' //localStorage에 저장될 이름
