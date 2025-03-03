@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import supabase from '../supabase/Client';
 
 const ProfileForm = () => {
@@ -38,7 +38,7 @@ const ProfileForm = () => {
           <input
             type="text"
             name="id"
-            className="border-4 border-white rounded-lg bg-inherit p-2 placeholder-palette2"
+            className="border-4 border-white rounded-lg bg-palette5 p-2 placeholder-palette2"
             placeholder="ID"
             disabled
           />
