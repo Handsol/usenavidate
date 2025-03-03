@@ -1,11 +1,39 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import naviDateLogo from '/navi_date_purple.png';
 import { IoClose } from 'react-icons/io5';
 import { PATH } from '../../shared/PATH';
+import supabase from '../../supabase/Client';
+import { AlertSuccess } from '../../common/Alert';
 
 const Header = () => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
+  const [session, setSession] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedSession = JSON.parse(localStorage.getItem('session'));
+    setSession(storedSession);
+  }, []);
+
+  // 로그아웃
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      AlertError('로그아웃 실패!', '그냥 계세요.');
+      return;
+    }
+
+    localStorage.removeItem('session');
+    setSession(null);
+
+    AlertSuccess('로그아웃 성공!', '다음에 또 만나요!');
+
+    // 로그인 페이지로 이동
+    navigate(PATH.LOGIN);
+  };
+
   return (
     // Header
     <nav className="fixed top-0 w-full bg-white text-palette1 z-50">
@@ -21,13 +49,22 @@ const Header = () => {
           <Link to={PATH.HOME}>useNaviDate()</Link>
         </div>
 
-        {/* Login 버튼 */}
-        <Link
-          to={PATH.LOGIN}
-          className="bg-palette1 hover:bg-palette3 w-20 h-8 flex items-center justify-center rounded-2xl text-palette5 text-md font-medium font-montserrat transition-all duration-300"
-        >
-          Login
-        </Link>
+        {/* Login / logout 버튼 */}
+        {session ? (
+          <button
+            onClick={handleLogout}
+            className="bg-palette3 hover:bg-palette1 w-20 h-8 flex items-center justify-center rounded-2xl text-palette5 text-md font-medium font-montserrat transition-all duration-300"
+          >
+            Logout
+          </button>
+        ) : (
+          <Link
+            to={PATH.LOGIN}
+            className="bg-palette1 hover:bg-palette3 w-20 h-8 flex items-center justify-center rounded-2xl text-palette5 text-md font-medium font-montserrat transition-all duration-300"
+          >
+            Login
+          </Link>
+        )}
 
         {/* 햄부기우기 네비게이션 바 */}
         <div
