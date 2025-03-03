@@ -41,7 +41,20 @@ const NaviTalkDetail = () => {
         return;
       }
 
-      setPost(data);
+      const { data: photosData, error: photosError } = await supabase
+        .from('posts_photos')
+        .select('posts_id, posts_img_url')
+        .eq('posts_id', id);
+
+      if (photosError || !photosData) {
+        console.error('이미지 불러오기 오류:', photosError);
+        return;
+      }
+
+      setPost({
+        ...data,
+        posts_img_url: photosData?.map((photo) => photo.posts_img_url) || []
+      });
       setLoading(false);
     };
     fetchPost();
@@ -56,17 +69,17 @@ const NaviTalkDetail = () => {
   }
 
   return (
-    <div className="flex flex-col h-[100vh] max-w-[1000px] mx-auto bg-palette4 gap-6">
+    <div className="flex flex-col h-[100vh] max-w-[1000px] mx-auto bg-palette4 gap-4">
       <p className="flex mt-10 text-2xl font-semibold text-palette1">Location</p>
       {/* 지도 */}
       <div className="flex flex-col gap-5">
         <p className="flex text-2xl font-semibold text-center">{post.posts_location}</p>
-        <div className="flex w-full h-[450px] justify-center items-center bg-palette3 rounded-3xl">여기는 지도</div>
+        <div className="flex w-full h-[350px] justify-center items-center bg-palette3 rounded-3xl">여기는 지도</div>
       </div>
       {/* 사진 첨부 */}
       <div className="flex flex-row w-full h-[170px] justify-between">
         {imageUrls.slice(0, 5).map((img, index) => (
-          <div key={index} className="flex w-[170px] h-[170px] bg-gray-400 rounded-3xl">
+          <div key={index} className="flex w-[150px] h-[150px] rounded-3xl">
             <img src={img} alt="이미지" className="w-full h-full object-cover rounded-3xl" />
           </div>
         ))}
