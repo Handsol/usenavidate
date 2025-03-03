@@ -41,6 +41,7 @@ const NaviTalkDetail = () => {
         return;
       }
 
+      // 이미지 불러오기
       const { data: photosData, error: photosError } = await supabase
         .from('posts_photos')
         .select('posts_id, posts_img_url')
@@ -103,7 +104,11 @@ const NaviTalkDetail = () => {
         <div className="flex flex-col w-full gap-1">
           <p className="flex text-xl font-semibold text-palette1 pl-3">태그</p>
           <div className="flex w-full h-[60px] border-4 border-palette5 text-2xl items-center rounded-3xl pl-5">
-            태그
+            {(typeof post.posts_tags === 'string' ? post.posts_tags.split(',') : post.posts_tags || []).map(
+              (tag, index) => (
+                <p key={index}>#{tag}</p>
+              )
+            )}
           </div>
         </div>
         <div className="flex flex-col w-full gap-1">
