@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { PATH } from '../shared/PATH';
 
 const DateRoutePost = ({ post }) => {
   return (
