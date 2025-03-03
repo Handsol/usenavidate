@@ -1,5 +1,4 @@
 import { useState, Fragment } from 'react';
-import Comment from '../components/Comment';
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions, Transition } from '@headlessui/react';
 import { ageGroups, locations, themes } from '../data/categoryData';
 
@@ -248,7 +247,6 @@ const WritePostPage = () => {
           </div>
         </section>
       </form>
-      <Comment />
     </div>
   );
 };
