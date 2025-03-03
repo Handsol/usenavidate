@@ -10,7 +10,7 @@ const useAuthStore = create(
       //   supabase에서 userData를 받아 사용하는 용도
       userData: null, // auth table 완성되면 해당 부분 수정 필요
       // 로그인 state 관리
-      userLogin: (user) => set((state) => ({ userData: user, isAuthenticated: true })),
+      userLogin: (user) => set({ userData: user, isAuthenticated: true }),
       // 로그아웃 state 관리
       userLogout: () => set({ userData: null, isAuthenticated: false })
     }),
