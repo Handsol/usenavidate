@@ -17,16 +17,15 @@ const WritePostPage = () => {
       setImage(imageUrl);
       setIsChange(true);
     }
-  }
+  };
 
   const removeImage = (e) => {
     e.preventDefault();
     setImage(null);
     setIsChange(false);
-  }
+  };
 
   const postMultipleImages = (e, index) => {
-
     const file = e.target.files[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file); // 파일 URL 생성
@@ -44,7 +43,6 @@ const WritePostPage = () => {
     setImages(newImages); // 상태 업데이트
   };
 
-
   return (
     <div className="w-full bg-palette4 flex flex-col justify-center items-center h-dvh">
       <form className="flex flex-row gap-10 bg-[#fdf9e1] p-6 rounded-xl shadow-xl">
@@ -52,39 +50,64 @@ const WritePostPage = () => {
           <label className="flex flex-col mb-4 text-palette2 font-bold text-[20px]">
             사진
             {isChange && image ? (
-              <div className='relative'>
-                <img src={image} alt="" className="bg-white w-[400px] h-[400px] rounded-xl bg-no-repeat bg-center" onClick={() => setIsChange(false)} />
-                <button type='button' onClick={removeImage} className='absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 text-[13px]'>X</button>
+              <div className="relative">
+                <img
+                  src={image}
+                  alt=""
+                  className="bg-white w-[400px] h-[400px] rounded-xl bg-no-repeat bg-center"
+                  onClick={() => setIsChange(false)}
+                />
+                <button
+                  type="button"
+                  onClick={removeImage}
+                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 text-[13px]"
+                >
+                  X
+                </button>
               </div>
             ) : (
-              <input type="file" className="bg-white cursor-pointer w-[400px] h-[400px] rounded-xl bg-no-repeat bg-center bg-[url('./assets/img-plus.png')]
+              <input
+                type="file"
+                className="bg-white cursor-pointer w-[400px] h-[400px] rounded-xl bg-no-repeat bg-center bg-[url('./assets/img-plus.png')]
                                             file:border-none file:bg-inherit file:text-transparent
                                             file:w-full file:px-0 file:cursor-pointer"
-                onChange={postImage} />
+                onChange={postImage}
+              />
             )}
           </label>
           <div className="flex flex-row gap-3 mt-4">
             {images.map((img, index) => (
-              <div key={index} className="relative w-[90px] h-[90px] cursor-pointer bg-white rounded-xl bg-[url('./assets/img-plus.png')] bg-no-repeat bg-center bg-[length:34px_34px]" >
+              <div
+                key={index}
+                className="relative w-[90px] h-[90px] cursor-pointer bg-white rounded-xl bg-[url('./assets/img-plus.png')] bg-no-repeat bg-center bg-[length:34px_34px]"
+              >
                 {img ? (
                   <>
-                    <img src={img} alt={`image-${index}`} className='w-full h-full object-cover rounded-xl' onChange={() => setIsChange(false)} />
-                    <button type='button'
+                    <img
+                      src={img}
+                      alt={`image-${index}`}
+                      className="w-full h-full object-cover rounded-xl"
+                      onChange={() => setIsChange(false)}
+                    />
+                    <button
+                      type="button"
                       onClick={() => removeMultipleImage(index)}
-                      className='absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 text-[13px]'>
+                      className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 text-[13px]"
+                    >
                       X
                     </button>
                   </>
                 ) : (
-                  <label className='w-full h-full cursor-pointer'>
-                    <input type="file"
-                      className='w-full h-full opacity-0 file:border-none file:bg-inherit file:text-transparent
-                             file:w-full file:px-0 file:cursor-pointer cursor-pointer'
-                      onChange={(e) => postMultipleImages(e, index)} />
+                  <label className="w-full h-full cursor-pointer">
+                    <input
+                      type="file"
+                      className="w-full h-full opacity-0 file:border-none file:bg-inherit file:text-transparent
+                             file:w-full file:px-0 file:cursor-pointer cursor-pointer"
+                      onChange={(e) => postMultipleImages(e, index)}
+                    />
                     <div className="w-full h-full bg-no-repeat bg-center bg-cover rounded-xl cursor-pointer"></div>
                   </label>
-                )
-                }
+                )}
               </div>
             ))}
           </div>
