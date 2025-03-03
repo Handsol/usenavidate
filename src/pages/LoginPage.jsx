@@ -24,7 +24,7 @@ const LoginPage = () => {
 
     const { data: loginData, error } = await supabase.auth.signInWithPassword({ email, password });
 
-    console.log(loginData);
+    // console.log(loginData);
 
     if (error) {
       AlertError('로그인 실패!', error.message);
@@ -34,14 +34,14 @@ const LoginPage = () => {
     AlertSuccess('로그인 성공!', '안녕하세요! 어디로 가볼까요?');
 
     // 로그인한 사용자 정보 local에 저장
-    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    // const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
 
-    if (sessionError) {
-      AlertError('사용자 정보 오류', sessionError.message);
-      return;
-    }
+    // if (sessionError) {
+    //   AlertError('사용자 정보 오류', sessionError.message);
+    //   return;
+    // }
 
-    localStorage.setItem('session', JSON.stringify(sessionData.session));
+    // localStorage.setItem('session', JSON.stringify(sessionData.session));
 
     // 로그인시 HOME 화면으로 이동
     navigate('/');
