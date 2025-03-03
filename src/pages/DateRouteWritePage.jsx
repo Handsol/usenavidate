@@ -1,7 +1,7 @@
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { useEffect, useState } from 'react';
 import UseKakaoLoader from '../components/UseKakaoLoader';
-import { AlertError } from '../common/Alert';
+import { AlertError, AlertSuccess } from '../common/Alert';
 import supabase from '../supabase/Client';
 
 const DateRouteWritePage = () => {
@@ -19,7 +19,10 @@ const DateRouteWritePage = () => {
   const [dateTitle, setDateTitle] = useState('');
   // 데이트 코스 설명 상태
   const [description, setDescription] = useState('');
+  // 키워드 검색 시 보여주는 리스트
+  const [searchResults, setSearchResults] = useState([]);
 
+  // kakao Maps SDK 로드 여부 체크
   const checkKakaoLoaded = () => {
     // window.kakao와 그 안의 maps가 존재하는지 확인
     if (window.kakao && window.kakao.maps) {
@@ -70,10 +73,12 @@ const DateRouteWritePage = () => {
             posts_info: description,
             posts_review: 0,
             users_id: '25ec2e69-6f73-41e5-acde-d12dfc1e835d', // 테스트용 user_id
-            posts_tags: '' // 필요하면 태그 추가
+            posts_tags: '',
+            board_type: 'dateroute'
           }
         ])
         .select('posts_id') // posts_id 값 반환받기
+        .eq('board_type', 'dateroute')
         .single();
 
       if (postError) throw postError;
@@ -84,7 +89,7 @@ const DateRouteWritePage = () => {
         return;
       }
 
-      // posts_locations 테이블에 장소 정보 저장
+      //posts_locations 테이블에 장소 정보 저장
       const locationData = places.map((place) => ({
         posts_id: postId,
         posts_location_url: place.address // 주소를 posts_location_url 컬럼에 저장
@@ -93,55 +98,60 @@ const DateRouteWritePage = () => {
       const { error: locError } = await supabase.from('posts_locations').insert(locationData);
       if (locError) throw locError;
 
-      alert('게시글이 성공적으로 등록되었습니다!');
+      AlertSuccess('게시글이 성공적으로 등록되었습니다!');
     } catch (error) {
       AlertError(`등록 실패: ${error.message}`);
     }
   };
-
-  // 주소 검색 버튼, 입력창 클릭하면 호출
-  const handleSearchAddr = () => {
+  // Kakao Places API를 이용한 가게 이름 검색
+  const handleSearchPlace = () => {
     if (!isKakaoLoaded) {
-      alert('Kakao Maps API가 아직 로드되지 않았습니다.');
+      AlertError('Kakao Maps API가 아직 로드되지 않았습니다.');
       return;
     }
 
-    // Daum postcode 주소 검색 팝업 생성 후 오픈
-    new window.daum.Postcode({
-      oncomplete: function (addrData) {
-        const geocoder = new window.kakao.maps.services.Geocoder();
-        geocoder.addressSearch(addrData.address, (result, status) => {
-          if (status === window.kakao.maps.services.Status.OK) {
-            const lat = parseFloat(result[0].y); // 위도
-            const lng = parseFloat(result[0].x); // 경도
-            const currentPos = { lat, lng, address: addrData.address };
-            // 지도 인스턴스가 있다면, panTo 메서드로 해당 좌표로 지도 중심 이동
-            if (mapInstance) {
-              mapInstance.panTo(new window.kakao.maps.LatLng(lat, lng));
-            }
-            // 변환된 좌표에 마커 추가
-            setMarkers((prev) => [...prev, currentPos]);
-            // 주소 값 받아오기
-            setPlaces((prev) => [...prev, currentPos]);
-            // 새로운 주소 값이 입력될 때마다 모든 마커가 보이도록 자동 조정
-            if (mapInstance) {
-              const bounds = new window.kakao.maps.LatLngBounds();
-              [...markers, currentPos].forEach((marker) => {
-                bounds.extend(new window.kakao.maps.LatLng(marker.lat, marker.lng));
-              });
-
-              //모든 마커가 보이도록 자동 조정
-              mapInstance.setBounds(bounds);
-            }
-
-            setSearchQuery('');
-          } else {
-            alert('주소를 찾을 수 없습니다.');
-          }
-        });
+    const ps = new window.kakao.maps.services.Places();
+    ps.keywordSearch(searchQuery, (data, status) => {
+      if (status === window.kakao.maps.services.Status.OK) {
+        setSearchResults(data); // 검색 결과 업데이트
+      } else {
+        AlertError('검색 결과를 찾을 수 없습니다.');
+        setSearchResults([]);
       }
-    }).open(); // 주소 검색 팝업 열기
+    });
   };
+
+  // 검색된 가게를 선택하면 지도에 추가
+  const handleSelectPlace = (place) => {
+    const lat = parseFloat(place.y);
+    const lng = parseFloat(place.x);
+
+    const newPlace = {
+      lat,
+      lng,
+      address: place.road_address_name || place.address_name,
+      name: place.place_name
+    };
+
+    if (mapInstance) {
+      mapInstance.panTo(new window.kakao.maps.LatLng(lat, lng));
+    }
+
+    setMarkers((prev) => [...prev, newPlace]);
+    setPlaces((prev) => [...prev, newPlace]);
+    setSearchResults([]);
+    setSearchQuery('');
+
+    // 모든 마커가 보이도록 지도 자동 확대/축소
+    if (mapInstance) {
+      const bounds = new window.kakao.maps.LatLngBounds();
+      [...markers, newPlace].forEach((marker) => {
+        bounds.extend(new window.kakao.maps.LatLng(marker.lat, marker.lng));
+      });
+      mapInstance.setBounds(bounds);
+    }
+  };
+
   return (
     <div className="w-full h-screen flex overflow-hidden">
       <div className="w-1/3 p-6 overflow-auto flex flex-col items-center">
@@ -159,11 +169,24 @@ const DateRouteWritePage = () => {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="주소를 입력해주세요."
+            placeholder="가게 이름을 입력하세요"
             className="border p-3 w-full text-center rounded-lg cursor-pointer"
-            onClick={handleSearchAddr}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearchPlace()}
           />
         </div>
+        {searchResults.length > 0 && (
+          <div className="w-full max-w-sm bg-white border rounded-lg shadow-lg mt-2">
+            {searchResults.map((place, index) => (
+              <div
+                key={index}
+                className="p-2 hover:bg-gray-200 cursor-pointer"
+                onClick={() => handleSelectPlace(place)}
+              >
+                {place.place_name} - {place.road_address_name || place.address_name}
+              </div>
+            ))}
+          </div>
+        )}
         {/* 선택한 장소 목록 보여주기 */}
         <div className="mt-6 w-full max-w-sm">
           {places.length === 0 ? (
@@ -171,7 +194,7 @@ const DateRouteWritePage = () => {
           ) : (
             places.map((place, index) => (
               <div key={index} className="flex justify-between items-center border border-palette2 p-3 mt-2 rounded-lg">
-                <span>{place.address}</span>
+                <span>{place.name}</span>
                 <button onClick={() => handleDeleteAddrList(index)} className="text-palette8 text-lg">
                   삭제
                 </button>
@@ -181,7 +204,7 @@ const DateRouteWritePage = () => {
         </div>
         {/* 코스 설명 */}
         <textarea
-          className="border w-3/4 p-2 mt-4"
+          className="border w-3/4 p-2 mt-4 resize-none"
           rows="4"
           placeholder="데이트 코스 설명을 입력하세요"
           value={description}
