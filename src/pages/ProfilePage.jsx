@@ -1,5 +1,4 @@
 import { ImageInput } from '../components/ImageInput';
-
 import ProfileForm from '../components/ProfileForm';
 
 const ProfilePage = () => {
@@ -11,7 +10,7 @@ const ProfilePage = () => {
         </div>
       </div>
       <div className="flex flex-row justify-center text-left w-full pt-5 px-40">
-        <div className="flex flex-col text-center text-palette6 w-full p-4">
+        <div className="flex flex-col text-center text-palette6 p-4">
           <p className="text-left text-palette1 text-1xl font-semibold">Profile</p>
           <ImageInput />
         </div>
