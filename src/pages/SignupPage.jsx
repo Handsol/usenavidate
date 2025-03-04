@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import supabase from '../supabase/Client';
-import { AlertError, AlertSuccess } from '../common/Alert';
+import { AlertError, AlertInfo, AlertSuccess } from '../common/Alert';
 import { useNavigate } from 'react-router-dom';
 
 const SignupPage = () => {
@@ -32,11 +32,24 @@ const SignupPage = () => {
     });
 
     if (error) {
-      console.log(signUpData, error);
-      AlertError('회원가입 실패!', error.message);
-      return;
+      switch (error.message) {
+        case 'email_exists':
+        case 'user_already_exists':
+          AlertInfo('잠깐!', '이미 사용 중인 이메일입니다.');
+          return;
+        case 'weak_password':
+          AlertError('경고', '비밀번호는 최소 8자리 이상이어야 합니다.');
+          return;
+        case 'invalid_email':
+          AlertError('경고', '올바른 이메일 형식이 아닙니다.');
+          return;
+        default:
+          AlertError('회원가입 실패!', `${error.message}`);
+          return;
+      }
     }
 
+    // 회원가입 성공 알림
     AlertSuccess('회원가입 성공!', '축하합니다! 어디로 가볼까요?');
 
     // 로그인된 사용자 정보 local에 저장
@@ -48,8 +61,6 @@ const SignupPage = () => {
     }
 
     localStorage.setItem('session', JSON.stringify(sessionData.session));
-
-    console.log(sessionData.session);
 
     // 회원가입 성공 시 홈 화면으로 이동
     navigate('/');
