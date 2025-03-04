@@ -32,7 +32,7 @@ const Search = () => {
         {/* 검색어 추천 */}
         <nav className="flex items-center justify-center gap-4">
           <p className="flex flex-row font-semibold text-palette1 text-lg cursor-default">추천 검색어 :</p>
-          <ul className="flex flex-row gap-3 font-semibold text-palette1 text-lg cursor-pointer">
+          <ul className="flex flex-row gap-3 font-semibold text-palette1 text-lg">
             <li>#20대</li>
             <li>#30대</li>
             <li>#점심 식사</li>
