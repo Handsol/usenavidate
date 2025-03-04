@@ -152,6 +152,20 @@ const WritePostPage = () => {
         const { data: publicUrlData } = supabase.storage.from('posts-photos').getPublicUrl(`posts-photos/${fileName}`);
         const imageUrl = publicUrlData.publicUrl;
         console.log('✅ 저장된 이미지 URL:', imageUrl);
+        // posts_location 테이블 저장
+        const { error: locationError } = await supabase.from('posts_locations').insert([
+          {
+            posts_id: postId,
+            posts_location_url: address,
+            posts_location_url_name: marketName
+          }
+        ]);
+
+        if (locationError) {
+          console.error('❌ 장소 정보 저장 실패:', locationError.message);
+          AlertError('장소 정보 저장 실패');
+          return;
+        }
 
         // `posts_photos` 테이블에 저장 (✅ postId 사용)
         const { error: insertError } = await supabase.from('posts_photos').insert([

@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import supabase from '../../supabase/Client';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import UseKakaoLoader from '../../components/UseKakaoLoader';
+import { useEffect, useState } from 'react';
 
 const NaviTalkDetail = () => {
   const { id } = useParams();
@@ -28,6 +29,39 @@ const NaviTalkDetail = () => {
   }
 
   useEffect(() => {
+    // 먼저 kakaoAdressMarkers 함수를 선언
+    const kakaoAdressMarkers = async (locations) => {
+      if (!window.kakao || !window.kakao.maps) {
+        console.error('Kakao Maps API가 아직 로드되지 않았습니다.');
+        return;
+      }
+      const geocoder = new window.kakao.maps.services.Geocoder();
+      const newMarkers = [];
+
+      await Promise.all(
+        locations.map(
+          (loc, index) =>
+            new Promise((resolve) => {
+              geocoder.addressSearch(loc.posts_location_url, (result, status) => {
+                console.log('주소 검색 결과:', loc.posts_location_url, result, status);
+                if (status === window.kakao.maps.services.Status.OK) {
+                  const lat = parseFloat(result[0].y);
+                  const lng = parseFloat(result[0].x);
+                  newMarkers.push({ lat, lng });
+
+                  if (index === 0) {
+                    setMapCenter({ lat, lng });
+                  }
+                } else {
+                  console.error(`주소 변환 실패: ${loc.posts_location_url}`);
+                }
+                resolve();
+              });
+            })
+        )
+      );
+      setMarkers(newMarkers);
+    };
     const fetchPost = async () => {
       setLoading(true);
       const { data, error } = await supabase.from('posts').select('*').eq('posts_id', id).single();
@@ -37,6 +71,7 @@ const NaviTalkDetail = () => {
         setLoading(false);
         return;
       }
+
       // 장소 데이터 가져오기 (주소 + 가게이름 포함)
       const { data: locData, error: locError } = await supabase
         .from('posts_locations')
@@ -51,37 +86,9 @@ const NaviTalkDetail = () => {
           kakaoAdressMarkers(locData); // 주소를 좌표로 변환하는 함수 호출
         }
       }
-      // Kakao API를 사용하여 주소를 좌표로 변환하는 함수
-      const kakaoAdressMarkers = (locations) => {
-        if (!window.kakao || !window.kakao.maps) {
-          console.error('Kakao Maps API가 아직 로드되지 않았습니다.');
-          return;
-        }
-        // Kakao Maps API에서 제공하는 Geocoder 객체 생성
-        // 이 객체를 사용하면 특정 주소를 입력받아 해당 위치의 위도(lat)와 경도(lng) 좌표를 반환
-        const geocoder = new window.kakao.maps.services.Geocoder();
-        const newMarkers = [];
-        // 순회하면서 주소 변환
-        locations.forEach((loc, index) => {
-          geocoder.addressSearch(loc.posts_location_url, (result, status) => {
-            if (status === window.kakao.maps.services.Status.OK) {
-              //
-              const lat = parseFloat(result[0].y);
-              const lng = parseFloat(result[0].x);
-
-              newMarkers.push({ lat, lng });
-
-              if (index === 0) {
-                setMapCenter({ lat, lng });
-              }
-
-              setMarkers([...newMarkers]);
-            } else {
-              console.error(`주소 변환 실패: ${loc.posts_location_url}`);
-            }
-          });
-        });
-      };
+      if (locData.length > 0) {
+        kakaoAdressMarkers(locData);
+      }
 
       // 이미지 불러오기
       const { data: photosData, error: photosError } = await supabase
