@@ -27,6 +27,7 @@ const Search = () => {
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
             placeholder="어디 갈 지 생각도 안하고 왔단 말이야..?"
             className="flex h-[70%] w-[80%] ml-5 text-lg data-[focus]: outline-none"
           />
