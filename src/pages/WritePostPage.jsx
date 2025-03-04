@@ -1,4 +1,8 @@
-import { useState } from 'react';
+import { useState, Fragment } from 'react';
+import { Listbox, ListboxButton, ListboxOption, ListboxOptions, Transition } from '@headlessui/react';
+import { ageGroups, locations, themes } from '../data/categoryData';
+
+
 
 const WritePostPage = () => {
   const [marketName, setMarketName] = useState('');
@@ -8,6 +12,9 @@ const WritePostPage = () => {
   const [image, setImage] = useState(null);
   const [images, setImages] = useState([null, null, null, null]);
   const [isChange, setIsChange] = useState(false);
+  const [Theme, setTheme] = useState(themes[0]);
+  const [Group, setGroup] = useState(ageGroups[0]);
+  const [Locations, setLocations] = useState(locations[0]);
 
   const postImage = (e) => {
     e.preventDefault();
@@ -44,7 +51,7 @@ const WritePostPage = () => {
   };
 
   return (
-    <div className="w-full bg-palette4 flex flex-col justify-center items-center h-dvh">
+    <div className="w-full bg-palette4 flex flex-col justify-center items-center h-full">
       <form className="flex flex-row gap-10 bg-[#fdf9e1] p-6 rounded-xl shadow-xl">
         <section className="flex flex-col items-center">
           <label className="flex flex-col mb-4 text-palette2 font-bold text-[20px]">
@@ -132,12 +139,104 @@ const WritePostPage = () => {
             />
           </label>
           <label className="flex flex-col">
-            <span className="text-palette2 font-bold text-[20px]">해쉬태그</span>{' '}
-            <input
-              type="text"
-              className="border-4 border-white rounded-lg bg-inherit w-[450px] p-2 placeholder:text-palette7"
-              placeholder="최대 10개까지 입력할 수 있습니다."
-            />
+            <span className="text-palette2 font-bold text-[20px]">태그</span>{' '}
+            <div className='w-full pt-2 flex flex-row gap-5 justify-center'>
+              <div className=" w-40">
+                <Listbox value={Theme} onChange={setTheme}>
+                  <div className="relative">
+                    <ListboxButton className="relative w-full border-4 border-palette5 font-bold rounded-lg bg-inherit py-2 pl-3 pr-10 text-left text-palette2 focus:outline-none focus:ring-2 focus:ring-gray-500 transition">
+                      {Theme.name}
+                    </ListboxButton>
+
+                    <Transition
+                      as={Fragment}
+                      enter="transition-all duration-1000 ease-in-out"
+                      enterFrom="max-h-0 opacity-0"
+                      enterTo="max-h-96 opacity-100"
+                      leave="transition-all duration-1000 ease-in-out"
+                      leaveFrom="max-h-96 opacity-100"
+                      leaveTo="max-h-0 opacity-0"
+                    >
+                      <ListboxOptions className="absolute mt-2 w-full overflow-hidden rounded-lg bg-palette5 text-gray-600 shadow-lg">
+                        {themes.map((theme) => (
+                          <ListboxOption
+                            key={theme.id}
+                            value={theme}
+                            className="cursor-pointer select-none py-2 pl-3 pr-10 hover:bg-gray-400 hover:text-palette5 transition flex items-center justify-between"
+                          >
+                            {theme.name}
+                          </ListboxOption>
+                        ))}
+                      </ListboxOptions>
+                    </Transition>
+                  </div>
+                </Listbox>
+              </div>
+              <div className=" w-40">
+                <Listbox value={Group} onChange={setGroup}>
+                  <div className="relative">
+                    <ListboxButton className="relative w-full border-4 border-palette5 font-bold rounded-lg bg-inherit py-2 pl-3 pr-10 text-left text-palette2 focus:outline-none focus:ring-2 focus:ring-gray-500 transition">
+                      {Group.name}
+                    </ListboxButton>
+
+                    <Transition
+                      as={Fragment}
+                      enter="transition-all duration-1000 ease-in-out"
+                      enterFrom="max-h-0 opacity-0"
+                      enterTo="max-h-96 opacity-100"
+                      leave="transition-all duration-1000 ease-in-out"
+                      leaveFrom="max-h-96 opacity-100"
+                      leaveTo="max-h-0 opacity-0"
+                    >
+                      <ListboxOptions className="absolute mt-2 w-full overflow-hidden rounded-lg bg-palette5 text-gray-600 shadow-lg">
+                        {ageGroups.map((group) => (
+                          <ListboxOption
+                            key={group.id}
+                            value={group}
+                            className="cursor-pointer select-none py-2 pl-3 pr-10 hover:bg-gray-400 hover:text-palette5 transition flex items-center justify-between"
+                          >
+                            {group.name}
+                          </ListboxOption>
+                        ))}
+                      </ListboxOptions>
+                    </Transition>
+                  </div>
+                </Listbox>
+              </div>
+              {/* ------------------ */}
+              <div className=" w-40">
+                <Listbox value={Locations} onChange={setLocations}>
+                  <div className="relative">
+                    <ListboxButton className="relative w-full border-4 border-palette5 font-bold rounded-lg bg-inherit py-2 pl-3 pr-10 text-left text-palette2 focus:outline-none focus:ring-2 focus:ring-gray-500 transition">
+                      {Locations.name}
+                    </ListboxButton>
+
+                    <Transition
+                      as={Fragment}
+                      enter="transition-all duration-1000 ease-in-out"
+                      enterFrom="max-h-0 opacity-0"
+                      enterTo="max-h-96 opacity-100"
+                      leave="transition-all duration-1000 ease-in-out"
+                      leaveFrom="max-h-96 opacity-100"
+                      leaveTo="max-h-0 opacity-0"
+                    >
+                      <ListboxOptions className="absolute mt-2 w-full overflow-hidden rounded-lg bg-palette5 text-gray-600 shadow-lg">
+                        {locations.map((location) => (
+                          <ListboxOption
+                            key={location.id}
+                            value={location}
+                            className="cursor-pointer select-none py-2 pl-3 pr-10 hover:bg-gray-400 hover:text-palette5 transition flex items-center justify-between"
+                          >
+                            {location.name}
+                          </ListboxOption>
+                        ))}
+                      </ListboxOptions>
+                    </Transition>
+                  </div>
+                </Listbox>
+              </div>
+
+            </div>
           </label>
           <label className="flex flex-col">
             <span className="text-palette2 font-bold text-[20px]">별점</span>
