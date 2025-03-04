@@ -9,45 +9,27 @@ import {
 
 export default function Example() {
   return (
-    <div className="fixed top-24 w-52 text-right">
+    <div>
       <Menu>
-        <MenuButton className="inline-flex items-center gap-2 rounded-md bg-gray-800 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-700 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white">
+        <MenuButton>
           <img src="/post-edit.png" alt="Edit" className="w-[50px] h-[50px]" />
-          <ChevronDownIcon className="size-4 fill-white/60" />
         </MenuButton>
 
         <MenuItems
           transition
           anchor="bottom end"
-          className="w-52 origin-top-right rounded-xl border border-white/5 bg-white/5 p-1 text-sm/6 text-white transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
+          className="w-64 origin-top-right rounded-xl border border-white/5 bg-white p-2 text-lg text-palette3 transition-all duration-200 ease-out transform translate-y-5 opacity-0 data-[open]:translate-y-0 data-[open]:opacity-100 [--anchor-gap:20px] focus:outline-none"
         >
           <MenuItem>
-            <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
-              <PencilIcon className="size-4 fill-white/30" />
-              Edit
-              <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-[focus]:inline">⌘E</kbd>
+            <button className="group flex w-full items-center gap-3 rounded-lg py-2 px-4 hover:bg-gray-100">
+              <PencilIcon className="size-6 fill-palette3" />
+              게시글 수정
             </button>
           </MenuItem>
           <MenuItem>
-            <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
-              <Square2StackIcon className="size-4 fill-white/30" />
-              Duplicate
-              <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-[focus]:inline">⌘D</kbd>
-            </button>
-          </MenuItem>
-          <div className="my-1 h-px bg-white/5" />
-          <MenuItem>
-            <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
-              <ArchiveBoxXMarkIcon className="size-4 fill-white/30" />
-              Archive
-              <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-[focus]:inline">⌘A</kbd>
-            </button>
-          </MenuItem>
-          <MenuItem>
-            <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
-              <TrashIcon className="size-4 fill-white/30" />
-              Delete
-              <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-[focus]:inline">⌘D</kbd>
+            <button className="group flex w-full items-center gap-3 rounded-lg py-2 px-4 hover:bg-gray-100">
+              <TrashIcon className="size-6 fill-palette3" />
+              게시글 삭제
             </button>
           </MenuItem>
         </MenuItems>
