@@ -1,66 +1,23 @@
-import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import supabase from '../../supabase/Client';
 import PostEditDropDown from '../../components/PostEditDropdown';
+import useFetchPostDetail from '../../hooks/useFetchPostDetail';
 
 const NaviTalkDetail = () => {
   const { id } = useParams();
-  const [post, setPost] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { post, loading, updatePost, deletePost } = useFetchPostDetail(id);
 
   const reviewStars = () => {
-    if (post.posts_review === 1) {
-      return '⭐';
-    } else if (post.posts_review === 2) {
-      return '⭐⭐';
-    } else if (post.posts_review === 3) {
-      return '⭐⭐⭐';
-    } else if (post.posts_review === 4) {
-      return '⭐⭐⭐⭐';
-    } else if (post.posts_review === 5) {
-      return '⭐⭐⭐⭐⭐';
-    }
+    if (!post) return '';
+    return '⭐'.repeat(post.posts_review);
   };
 
   // 게시글의 이미지 URL을 저장할 배열
-  const imageUrls =
-    post?.posts_img_url && post.posts_img_url.length > 0 ? [...post.posts_img_url] : ['/navi_talk_default.png'];
+  const imageUrls = post?.posts_img_url?.length > 0 ? [...post.posts_img_url] : ['/navi_talk_default.png'];
 
-  // 이미지가 5개 미만일 시 나타날 default 이미지 추가
+  // 이미지가 5개 미만일 경우 default 이미지 추가
   while (imageUrls.length < 5) {
     imageUrls.push('/navi_talk_default.png');
   }
-
-  useEffect(() => {
-    const fetchPost = async () => {
-      setLoading(true);
-      const { data, error } = await supabase.from('posts').select('*').eq('posts_id', id).single();
-
-      if (error) {
-        console.error('게시글 불러오기 오류:', error);
-        setLoading(false);
-        return;
-      }
-
-      // 이미지 불러오기
-      const { data: photosData, error: photosError } = await supabase
-        .from('posts_photos')
-        .select('posts_id, posts_img_url')
-        .eq('posts_id', id);
-
-      if (photosError || !photosData) {
-        console.error('이미지 불러오기 오류:', photosError);
-        return;
-      }
-
-      setPost({
-        ...data,
-        posts_img_url: photosData?.map((photo) => photo.posts_img_url) || []
-      });
-      setLoading(false);
-    };
-    fetchPost();
-  }, [id]);
 
   if (loading) {
     return <div>로딩 중...</div>;
@@ -77,7 +34,7 @@ const NaviTalkDetail = () => {
           <p className="flex w-full text-2xl font-semibold text-palette1">Location</p>
           <p>여기는 주소 어쩌구저쩌구 막 길쭉하게 스근하게 스르륵</p>
         </div>
-        <PostEditDropDown post={post} className="flex w-[50px]" />
+        <PostEditDropDown post={post} updatePost={updatePost} deletePost={deletePost} className="flex w-[50px]" />
       </div>
 
       {/* 지도 */}

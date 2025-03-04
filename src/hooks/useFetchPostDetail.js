@@ -51,14 +51,17 @@ const useFetchPostDetail = (postId) => {
 
   // 게시글 수정 로직
   const updatePost = async (updatedData) => {
-    const { data, error } = await supabase.from('posts').update(updatedData).eq('posts_id', postId);
+    const { data, error } = await supabase.from('posts').update(updatedData).eq('posts_id', postId).select();
 
     if (error) {
       console.error('게시글 수정 오류', error);
       return false;
     }
 
-    setPost((prev) => ({ ...prev, ...updatedData }));
+    if (data && data.length > 0) {
+      setPost(data[0]);
+    }
+
     return true;
   };
 
