@@ -1,11 +1,5 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import {
-  ArchiveBoxXMarkIcon,
-  ChevronDownIcon,
-  PencilIcon,
-  Square2StackIcon,
-  TrashIcon
-} from '@heroicons/react/16/solid';
+import { PencilIcon, TrashIcon } from '@heroicons/react/16/solid';
 
 export default function Example() {
   return (
