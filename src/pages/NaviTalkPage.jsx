@@ -4,8 +4,7 @@ import Search from '../components/Search';
 import useFetchPosts from '../hooks/useFetchPosts';
 
 const NaviTalkPage = () => {
-  const location = useLocation();
-  const boardType = location.pathname.includes('navitalk') ? 'navitalk' : '';
+  const boardType = 'navitalk';
 
   const { posts, loading } = useFetchPosts(boardType);
 
@@ -13,7 +12,7 @@ const NaviTalkPage = () => {
     <div className="flex-col h-[100vh] max-w-[1300px] mx-auto bg-palette4">
       <Search />
       {loading ? (
-        <p className="text-center text-lg text-gray-500 mt-10">로딩 중...</p>
+        <p className="text-center text-lg text-palette1 mt-10">로딩 중...</p>
       ) : (
         <PostList posts={posts} boardType={boardType} />
       )}
