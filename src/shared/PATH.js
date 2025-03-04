@@ -5,7 +5,7 @@ export const PATH = {
   MYPAGE: '/mypage',
   PROFILE: '/profile',
   WRITEPOST: '/writepost',
-  DATEDETAIL: '/datedetail',
+  DATEDETAIL: '/datedetail/:id',
   DATEWRITE: '/datewrite',
   NAVITALK: '/navitalk',
   NAVITALKDETAIL: '/navitalkdetail/:id'
