@@ -8,7 +8,7 @@ const PostList = ({ posts, boardType }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="grid grid-cols-3 gap-8">
+    <div className="grid grid-cols-3 gap-10">
       {posts.map((post) =>
         boardType === 'navitalk' ? (
           <NaviTalkPost key={post.posts_id} post={post} />
@@ -18,23 +18,23 @@ const PostList = ({ posts, boardType }) => {
       )}
 
       {/* 게시글 작성 버튼 */}
-      <div className="flex flex-col items-end fixed bottom-6 right-6 gap-3 mr-2 mb-2">
+      <div className=" w-44 flex flex-col items-end fixed bottom-6 right-6 gap-3 mr-5 mb-5">
         {/* 토글 될 버튼 목록 */}
         <div
-          className={`flex flex-col items-end gap-3 overflow-hidden transition-all duration-500 ease-in-out ${
+          className={`w-48 flex flex-col justify-end items-center gap-3 overflow-hidden transition-all duration-500 ease-in-out ${
             isOpen ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'
           }`}
         >
-          <div className="flex flex-row items-center gap-2">
-            <p className="text-right text-2xl font-semibold text-palette2 cursor-default">데이트 루트 작성</p>
+          <div className="w-48 flex justify-end items-center gap-2">
+            <p className="bg-palette1 text-right text-md font-medium text-palette5 px-1 py-0.5">데이트 루트 작성</p>
             <Link to={PATH.DATEWRITE}>
-              <img src="/write_post_logo.png" alt="데이트 루트 작성" />
+              <img src="/write_post_logo.png" alt="데이트 루트 작성" className="w-14" />
             </Link>
           </div>
-          <div className="flex flex-row items-center gap-2">
-            <p className="text-right text-2xl font-semibold text-palette2 cursor-default">장소 리뷰 작성</p>
+          <div className="w-48 flex justify-end items-center gap-2">
+            <p className="bg-palette1 text-right text-md font-medium text-palette5 px-1 py-0.5">장소 리뷰 작성</p>
             <Link to={PATH.WRITEPOST}>
-              <img src="/write_post_logo.png" alt="네비톡 작성" />
+              <img src="/write_post_logo.png" alt="네비톡 작성" className="w-14" />
             </Link>
           </div>
         </div>
@@ -44,7 +44,7 @@ const PostList = ({ posts, boardType }) => {
           onClick={() => setIsOpen(!isOpen)}
           className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : 'rotate-0'}`}
         >
-          <img src="/write_post_plus.png" alt="게시글 작성" />
+          <img src="/write_post_plus.png" alt="게시글 작성" className="w-14" />
         </button>
       </div>
     </div>

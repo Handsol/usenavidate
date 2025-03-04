@@ -19,7 +19,7 @@ const Search = () => {
 
   return (
     // 큰 컨테이너
-    <div className="border border-red-600 flex flex-col item-center justify-center h-[230px] max-w-[1200px] mx-auto -mt-2">
+    <div className="flex flex-col item-center justify-center h-[230px] max-w-[1200px] mx-auto -mt-2">
       <div className="flex flex-col h-full justify-center gap-4">
         {/* 검색창 */}
         <section className="flex w-2/4 h-12 mx-auto bg-palette5 justify-between items-center px-2 rounded-full">
