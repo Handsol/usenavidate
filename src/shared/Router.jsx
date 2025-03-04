@@ -42,6 +42,7 @@ const RouterContents = () => {
         <Route path={PATH.NAVITALKDETAIL} element={<NaviTalkDetail />} />
         <Route path={PATH.DATEWRITE} element={<DateRouteWritePage />} />
         <Route path={PATH.PROFILE} element={<ProfilePage />} />
+        <Route path={PATH.SEARCH} element={<SearchPage />} />
       </Routes>
     </div>
   );
