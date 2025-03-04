@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import supabase from '../../supabase/Client';
+import PostEditDropDown from '../../components/PostEditDropdown';
 
 const NaviTalkDetail = () => {
   const { id } = useParams();
@@ -71,9 +72,16 @@ const NaviTalkDetail = () => {
 
   return (
     <div className="flex flex-col h-[100vh] max-w-[1000px] mx-auto bg-palette4 gap-4">
-      <p className="flex mt-10 text-2xl font-semibold text-palette1">Location</p>
+      <div className="flex flex-row w-full justify-between items-center mt-5">
+        <div className="flex flex-col justify-start">
+          <p className="flex w-full text-2xl font-semibold text-palette1">Location</p>
+          <p>여기는 주소 어쩌구저쩌구 막 길쭉하게 스근하게 스르륵</p>
+        </div>
+        <PostEditDropDown post={post} className="flex w-[50px]" />
+      </div>
+
       {/* 지도 */}
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col">
         <p className="flex text-2xl font-semibold text-center">{post.posts_location}</p>
         <div className="flex w-full h-[350px] justify-center items-center bg-palette3 rounded-3xl">여기는 지도</div>
       </div>
