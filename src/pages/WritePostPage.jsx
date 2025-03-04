@@ -1,6 +1,8 @@
 import { useState, Fragment } from 'react';
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions, Transition } from '@headlessui/react';
 import { ageGroups, locations, themes } from '../data/categoryData';
+import supabase from '../supabase/Client';
+import { AlertError, AlertSuccess } from '../common/Alert';
 
 
 
@@ -15,6 +17,7 @@ const WritePostPage = () => {
   const [Theme, setTheme] = useState(themes[0]);
   const [Group, setGroup] = useState(ageGroups[0]);
   const [Locations, setLocations] = useState(locations[0]);
+  const [file, setFile] = useState(null);
 
   const postImage = (e) => {
     e.preventDefault();
@@ -23,6 +26,7 @@ const WritePostPage = () => {
       const imageUrl = URL.createObjectURL(file);
       setImage(imageUrl);
       setIsChange(true);
+      setFile(file);
     }
   };
 
@@ -49,10 +53,117 @@ const WritePostPage = () => {
     newImages[index] = null; // 해당 인덱스의 이미지를 null로 설정
     setImages(newImages); // 상태 업데이트
   };
+  console.log(file);
+  const postSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const ratingValue = rating.length; // 별점 갯수
+      const tagsArray = [Theme.name, Group.name, Locations.name].filter(Boolean); // filter:boolean (빈 값 제거) 선택되지 않았을 경우
+      if (image) {
+        try {
+
+          const mimeType = file.type;
+          const fileExtesion = mimeType.split('/')[0];
+          const fileName = `${Date.now()}-${marketName}.${fileExtesion}`;
+          const filePath = `posts_photos/${fileName}`
+
+          const { data, error } = await supabase.storage.from('posts-photos').upload(filePath, file);
+          if (error) {
+            console.error(error.message);
+            AlertError('이미지 업로드 실패');
+            return;
+          }
+
+          console.log('업로드 = ', data);
+
+          const { data: publicUrlData } = supabase.storage.from('posts-photos').getPublicUrl(fileName);
+          const imageUrl = publicUrlData.publicUrl;
+
+          console.log(imageUrl);
+
+          const { data: postData, error: postError } = await supabase
+            .from('posts')
+            .select('posts_id')
+
+          if (postError || !postData) {
+            console.error(postError?.message || '게시글을 찾을 수 없습니다.');
+            AlertError('게시글을 찾을 수 없습니다.');
+            return;
+          }
+
+          const postId = postData?.[0]?.posts_id;
+
+          const { error: insertError } = await supabase.from('posts_photos').insert([
+            {
+              posts_id: postId,
+              posts_img_url: imageUrl,
+            }
+          ]);
+
+          if (insertError) {
+            console.error(insertError.message);
+            AlertError('이미지 정보 저장 실패');
+            return;
+          }
+
+
+        } catch (uploadError) {
+          console.error(uploadError.message);
+          AlertError('이미지 업로드에 실패했습니다.');
+          return;
+        }
+      }
+
+      try {
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        if (userError || !user) {
+          AlertError('사용자를 찾을 수 없습니다.');
+          return;
+        }
+
+        const userId = user.id;
+
+        const { data: postData, error: postError } = await supabase.from('posts').insert([
+          {
+            posts_title: marketName,
+            users_id: userId,
+            posts_review: ratingValue,
+            posts_info: description,
+            posts_value: null,
+            board_type: 'navitalk'
+          }
+        ]).select('posts_id');
+        console.log(postData)
+        if (postError) throw new Error('게시글 작성 실패');
+        const postId = postData?.[0]?.posts_id; // photos 테이블에 삽입될 게시글 ID
+
+        // 'posts_tags' 테이블 저장
+        if (tagsArray.length > 0) {
+          const tagInsert = tagsArray.map((tag) => ({
+            posts_id: postId,
+            tag_name: tag,
+          }));
+
+          console.log(postId);
+          const { error: tagError } = await supabase.from('posts_tag').insert(tagInsert);
+          if (tagError) throw new Error('태그 저장 실패');
+        }
+        AlertSuccess('게시글이 등록되었습니다!');
+      } catch (dberror) {
+        console.error(dberror);
+        AlertError('게시글 등록에 실패했습니다.');
+      }
+
+    } catch (error) {
+      console.error(error);
+      AlertError('오류가 발생했습니다. 다시 실행해주세요.');
+    }
+  }
 
   return (
     <div className="w-full bg-palette4 flex flex-col justify-center items-center h-full">
-      <form className="flex flex-row gap-10 bg-[#fdf9e1] p-6 rounded-xl shadow-xl">
+      <form onSubmit={postSubmit} className="flex flex-row gap-10 bg-[#fdf9e1] p-6 rounded-xl shadow-xl">
         <section className="flex flex-col items-center">
           <label className="flex flex-col mb-4 text-palette2 font-bold text-[20px]">
             사진
@@ -138,7 +249,7 @@ const WritePostPage = () => {
               onChange={(e) => setAddress(e.target.value)}
             />
           </label>
-          <label className="flex flex-col">
+          <div className="flex flex-col">
             <span className="text-palette2 font-bold text-[20px]">태그</span>{' '}
             <div className='w-full pt-2 flex flex-row gap-5 justify-center'>
               <div className=" w-40">
@@ -237,7 +348,7 @@ const WritePostPage = () => {
               </div>
 
             </div>
-          </label>
+          </div>
           <label className="flex flex-col">
             <span className="text-palette2 font-bold text-[20px]">별점</span>
             <select
