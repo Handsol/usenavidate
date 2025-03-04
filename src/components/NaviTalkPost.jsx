@@ -16,11 +16,11 @@ const NaviTalkPost = ({ post }) => {
         <div className="flex flex-row w-full h-[50%] items-center justify-between px-2">
           <div className="flex w-full text-lg truncate">
             <ul className="flex flex-row gap-2">
-              {(typeof post.posts_tags === 'string' ? post.posts_tags.split(',') : post.posts_tags || []).map(
-                (tag, index) => (
-                  <li key={index}>#{tag}</li>
-                )
-              )}
+              {post.posts_tag.map((tag, index) => (
+                <span key={index} className="px-2 py-1 bg-gray-200 rounded-lg text-sm">
+                  #{tag}
+                </span>
+              ))}
             </ul>
           </div>
           <div className="flex text-lg font-semibold flex-shrink-0">{post.users_nickname}</div>
