@@ -26,13 +26,13 @@ const PostList = ({ posts, boardType }) => {
           }`}
         >
           <div className="w-48 flex justify-end items-center gap-2">
-            <p className="bg-palette1 text-right text-md font-medium text-palette5 px-1 py-0.5">데이트 루트 작성</p>
+            <p className="text-right text-md font-medium text-palette7 px-1 py-0.5">데이트 루트 작성</p>
             <Link to={PATH.DATEWRITE}>
               <img src="/write_post_logo.png" alt="데이트 루트 작성" className="w-14" />
             </Link>
           </div>
           <div className="w-48 flex justify-end items-center gap-2">
-            <p className="bg-palette1 text-right text-md font-medium text-palette5 px-1 py-0.5">장소 리뷰 작성</p>
+            <p className="text-right text-md font-medium text-palette7 px-1 py-0.5">장소 리뷰 작성</p>
             <Link to={PATH.WRITEPOST}>
               <img src="/write_post_logo.png" alt="네비톡 작성" className="w-14" />
             </Link>
