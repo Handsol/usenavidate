@@ -3,18 +3,19 @@ import { useEffect, useState } from 'react';
 import UseKakaoLoader from '../components/UseKakaoLoader';
 import { AlertError, AlertSuccess } from '../common/Alert';
 import supabase from '../supabase/Client';
-import CustomSelect from '../components/CustomSelect';
-import useSelectFilters, { ageOptions, relationOptions, regionOptions, costOptions } from '../hooks/useSelectFilters';
+import { Listbox, ListboxButton, ListboxOption, ListboxOptions, Transition } from '@headlessui/react';
+import useSelectFilters, { ageGroups, relations, locations, costOptions } from '../data/categoryData';
+import { Fragment } from 'react';
 
 const DateRouteWritePage = () => {
   // useSelectFilters 훅을 사용하여 필터 상태 및 업데이트 함수를 가져옴
   const {
-    selectedAge,
-    setSelectedAge,
+    selectedAgeGroup,
+    setSelectedAgeGroup,
     selectedRelation,
     setSelectedRelation,
-    selectedRegion,
-    setSelectedRegion,
+    selectedLocation,
+    setSelectedLocation,
     selectedCost,
     setSelectedCost
   } = useSelectFilters();
@@ -80,8 +81,17 @@ const DateRouteWritePage = () => {
       AlertError('1개 이상의 장소를 선택해주세요');
       return;
     }
-
     try {
+      // 현재 로그인한 사용자 ID를 가져옴
+      const {
+        data: { user },
+        error: userError
+      } = await supabase.auth.getUser();
+      if (userError || !user) {
+        AlertError('로그인된 사용자를 찾을 수 없습니다.');
+        return;
+      }
+      const userId = user.id;
       //posts 테이블에 데이터 저장
       const { data: postData, error: postError } = await supabase
         .from('posts')
@@ -90,7 +100,7 @@ const DateRouteWritePage = () => {
             posts_title: dateTitle,
             posts_info: description,
             posts_review: 0,
-            users_id: '25ec2e69-6f73-41e5-acde-d12dfc1e835d', // 테스트용 사용자 ID
+            users_id: userId,
             posts_tags: '',
             board_type: 'dateroute'
           }
@@ -230,22 +240,132 @@ const DateRouteWritePage = () => {
           )}
         </div>
         {/* Headlessui 사용 CustomSelect 컴포넌트 사용 */}
-        <div className="w-4/5 max-w-md px-4 text-center flex gap-5 mt-5">
-          <CustomSelect label="나이대" options={ageOptions} selected={selectedAge} setSelected={setSelectedAge} />
-          <CustomSelect
-            label="관계"
-            options={relationOptions}
-            selected={selectedRelation}
-            setSelected={setSelectedRelation}
-          />
-          <CustomSelect
-            label="지역"
-            options={regionOptions}
-            selected={selectedRegion}
-            setSelected={setSelectedRegion}
-          />
-          <CustomSelect label="비용" options={costOptions} selected={selectedCost} setSelected={setSelectedCost} />
+        <div className="flex flex-col">
+          <span className="text-palette2 font-bold text-[20px]">태그</span>{' '}
+          <div className="w-full pt-2 flex flex-row gap-5 justify-center">
+            <div className="w-40">
+              <Listbox value={selectedAgeGroup} onChange={setSelectedAgeGroup}>
+                <div className="relative">
+                  <ListboxButton className="relative w-full border-4 border-palette5 font-bold rounded-lg bg-inherit py-2 pl-3 pr-10 text-left text-palette2 focus:outline-none focus:ring-2 focus:ring-gray-500 transition">
+                    {selectedAgeGroup.name}
+                  </ListboxButton>
+                  <Transition
+                    as={Fragment}
+                    enter="transition-all duration-1000 ease-in-out"
+                    enterFrom="max-h-0 opacity-0"
+                    enterTo="max-h-96 opacity-100"
+                    leave="transition-all duration-1000 ease-in-out"
+                    leaveFrom="max-h-96 opacity-100"
+                    leaveTo="max-h-0 opacity-0"
+                  >
+                    <ListboxOptions className="absolute mt-2 w-full overflow-hidden rounded-lg bg-palette5 text-gray-600 shadow-lg">
+                      {ageGroups.map((option, index) => (
+                        <ListboxOption
+                          key={index}
+                          value={option}
+                          className="cursor-pointer select-none py-2 pl-3 pr-10 hover:bg-gray-400 hover:text-palette5 transition flex items-center justify-between"
+                        >
+                          {option.name}
+                        </ListboxOption>
+                      ))}
+                    </ListboxOptions>
+                  </Transition>
+                </div>
+              </Listbox>
+            </div>
+            <div className="w-40">
+              <Listbox value={selectedRelation} onChange={setSelectedRelation}>
+                <div className="relative">
+                  <ListboxButton className="relative w-full border-4 border-palette5 font-bold rounded-lg bg-inherit py-2 pl-3 pr-10 text-left text-palette2 focus:outline-none focus:ring-2 focus:ring-gray-500 transition">
+                    {selectedRelation.name}
+                  </ListboxButton>
+                  <Transition
+                    as={Fragment}
+                    enter="transition-all duration-1000 ease-in-out"
+                    enterFrom="max-h-0 opacity-0"
+                    enterTo="max-h-96 opacity-100"
+                    leave="transition-all duration-1000 ease-in-out"
+                    leaveFrom="max-h-96 opacity-100"
+                    leaveTo="max-h-0 opacity-0"
+                  >
+                    <ListboxOptions className="absolute mt-2 w-full overflow-hidden rounded-lg bg-palette5 text-gray-600 shadow-lg">
+                      {relations.map((option, index) => (
+                        <ListboxOption
+                          key={index}
+                          value={option}
+                          className="cursor-pointer select-none py-2 pl-3 pr-10 hover:bg-gray-400 hover:text-palette5 transition flex items-center justify-between"
+                        >
+                          {option.name}
+                        </ListboxOption>
+                      ))}
+                    </ListboxOptions>
+                  </Transition>
+                </div>
+              </Listbox>
+            </div>
+            <div className="w-40">
+              <Listbox value={selectedLocation} onChange={setSelectedLocation}>
+                <div className="relative">
+                  <ListboxButton className="relative w-full border-4 border-palette5 font-bold rounded-lg bg-inherit py-2 pl-3 pr-10 text-left text-palette2 focus:outline-none focus:ring-2 focus:ring-gray-500 transition">
+                    {selectedLocation.name}
+                  </ListboxButton>
+                  <Transition
+                    as={Fragment}
+                    enter="transition-all duration-1000 ease-in-out"
+                    enterFrom="max-h-0 opacity-0"
+                    enterTo="max-h-96 opacity-100"
+                    leave="transition-all duration-1000 ease-in-out"
+                    leaveFrom="max-h-96 opacity-100"
+                    leaveTo="max-h-0 opacity-0"
+                  >
+                    <ListboxOptions className="absolute mt-2 w-full overflow-hidden rounded-lg bg-palette5 text-gray-600 shadow-lg">
+                      {locations.map((option, index) => (
+                        <ListboxOption
+                          key={index}
+                          value={option}
+                          className="cursor-pointer select-none py-2 pl-3 pr-10 hover:bg-gray-400 hover:text-palette5 transition flex items-center justify-between"
+                        >
+                          {option.name}
+                        </ListboxOption>
+                      ))}
+                    </ListboxOptions>
+                  </Transition>
+                </div>
+              </Listbox>
+            </div>
+            <div className="w-40">
+              <Listbox value={selectedCost} onChange={setSelectedCost}>
+                <div className="relative">
+                  <ListboxButton className="relative w-full border-4 border-palette5 font-bold rounded-lg bg-inherit py-2 pl-3 pr-10 text-left text-palette2 focus:outline-none focus:ring-2 focus:ring-gray-500 transition">
+                    {selectedCost.name}
+                  </ListboxButton>
+                  <Transition
+                    as={Fragment}
+                    enter="transition-all duration-1000 ease-in-out"
+                    enterFrom="max-h-0 opacity-0"
+                    enterTo="max-h-96 opacity-100"
+                    leave="transition-all duration-1000 ease-in-out"
+                    leaveFrom="max-h-96 opacity-100"
+                    leaveTo="max-h-0 opacity-0"
+                  >
+                    <ListboxOptions className="absolute mt-2 w-full overflow-hidden rounded-lg bg-palette5 text-gray-600 shadow-lg">
+                      {costOptions.map((option, index) => (
+                        <ListboxOption
+                          key={index}
+                          value={option}
+                          className="cursor-pointer select-none py-2 pl-3 pr-10 hover:bg-gray-400 hover:text-palette5 transition flex items-center justify-between"
+                        >
+                          {option.name}
+                        </ListboxOption>
+                      ))}
+                    </ListboxOptions>
+                  </Transition>
+                </div>
+              </Listbox>
+            </div>
+          </div>
         </div>
+
         {/* 데이트 코스 설명 입력창 */}
         <textarea
           className="border w-4/5 p-2 mt-4 resize-none"
