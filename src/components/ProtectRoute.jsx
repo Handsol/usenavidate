@@ -1,4 +1,4 @@
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { PATH } from '../shared/PATH';
 import { useEffect } from 'react';
 import { AlertError } from '../common/Alert';
