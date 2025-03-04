@@ -15,13 +15,16 @@ const ProfileForm = () => {
   // .eq('some_column', 'someValue')
   // .select()
 
+  // upsert (true) > 없는 파일이면 insert > 있는 파일이면 update
+
   useEffect(() => {
     const getUserData = async () => {
       const session = JSON.parse(localStorage.getItem('session'));
-      const authData = session.user.user_metadata;
+      const authData = session.user;
       const userEmail = authData.email;
       const { data, error } = await supabase.from('users').select('*').eq('users_email', userEmail);
-      setUserData(data);
+
+      setUserData(data[0]);
     };
     getUserData();
   }, []);
@@ -48,7 +51,7 @@ const ProfileForm = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
+  console.log(userData);
   return (
     <form onSubmit={handleSubmit}>
       <div className="flex flex-col text-palette6 w-full p-4">
@@ -57,7 +60,7 @@ const ProfileForm = () => {
           <input
             type="text"
             className="border-4 border-white rounded-lg bg-palette5 p-2 placeholder-palette2"
-            placeholder={`${userData.users_email}`}
+            placeholder={`${userData?.users_email}`}
             disabled
           />
           <span className="text-sm text-palette8">e-mail은 변경할 수 없습니다.</span>
