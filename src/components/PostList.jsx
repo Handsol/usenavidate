@@ -8,7 +8,7 @@ const PostList = ({ posts, boardType }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="w-[1300px] grid grid-cols-3 gap-10">
+    <div className="w-[1200px] grid grid-cols-3 gap-10">
       {posts.map((post) =>
         boardType === 'navitalk' ? (
           <NaviTalkPost key={post.posts_id} post={post} />
