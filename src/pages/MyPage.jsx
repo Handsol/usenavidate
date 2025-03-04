@@ -1,6 +1,8 @@
+import { Link } from 'react-router-dom';
 import DateRoutePost from '../components/DateRoutePost';
 import supabase from '../supabase/Client';
 import { useEffect, useState } from 'react';
+import { PATH } from '../shared/PATH';
 
 const MyPage = () => {
   // supabase 연결용 테스트 코드
@@ -66,6 +68,12 @@ const MyPage = () => {
           ))}
         </div>
       </section>
+      <Link
+        to={PATH.PROFILE}
+        className="bg-palette2 w-10% self-center text-palette5 text-lg rounded-full px-8 py-2 mt-4"
+      >
+        내 정보 수정 바로가기
+      </Link>
     </div>
   );
 };
