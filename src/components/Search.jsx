@@ -12,6 +12,11 @@ const Search = () => {
     }
   };
 
+  // 태그 클릭 시 해당 태그에 대한 검색
+  const handleTagClick = (tag) => {
+    navigate(`/search?q=${tag}`);
+  };
+
   return (
     // 큰 컨테이너
     <div className="flex item-center justify-center h-[250px] max-w-[1300px] mx-auto">
@@ -31,14 +36,16 @@ const Search = () => {
         </section>
         {/* 검색어 추천 */}
         <nav className="flex items-center justify-center gap-4">
-          <p className="flex flex-row font-semibold text-palette1 text-lg cursor-default">추천 검색어 :</p>
           <ul className="flex flex-row gap-3 font-semibold text-palette1 text-lg">
-            <li>#20대</li>
-            <li>#30대</li>
-            <li>#점심 식사</li>
-            <li>#전시회</li>
-            <li>#서울</li>
-            <li>#경기</li>
+            {['20대', '30대', '점심 식사', '전시회', '서울', '경기'].map((tag, index) => (
+              <li
+                key={index}
+                onClick={() => handleTagClick(tag)} // ✅ 태그 클릭 시 검색 실행
+                className="cursor-pointer hover:underline"
+              >
+                #{tag}
+              </li>
+            ))}
           </ul>
         </nav>
       </div>
