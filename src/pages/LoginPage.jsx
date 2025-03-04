@@ -10,7 +10,6 @@ const LoginPage = () => {
   const navigate = useNavigate();
   // zustand authstore의 set 꺼내오기
   const userLogin = useAuthStore((state) => state.userLogin);
-  const userLogout = useAuthStore((state) => state.userLogout);
 
   const {
     register,
@@ -25,7 +24,7 @@ const LoginPage = () => {
     const { data: loginData, error } = await supabase.auth.signInWithPassword({ email, password });
 
     // console.log(loginData);
-
+    userLogin(data);
     if (error) {
       AlertError('로그인 실패!', error.message);
       return;

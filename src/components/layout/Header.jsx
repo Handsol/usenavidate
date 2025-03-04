@@ -4,29 +4,33 @@ import naviDateLogo from '/navi_date_purple.png';
 import { IoClose } from 'react-icons/io5';
 import { PATH } from '../../shared/PATH';
 import supabase from '../../supabase/Client';
-import { AlertSuccess } from '../../common/Alert';
+import { AlertSuccess, AlertError } from '../../common/Alert';
+import useAuthStore from '../../zustand/AuthStore';
 
 const Header = () => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
-  const [session, setSession] = useState(null);
+  // const [session, setSession] = useState(null);
   const navigate = useNavigate();
+  const userLogout = useAuthStore((state) => state.userLogout);
+  const isAuthenticated = localStorage.getItem('authenticatedState'.isAuthenticated);
 
-  useEffect(() => {
-    const storedSession = JSON.parse(localStorage.getItem('session'));
-    setSession(storedSession);
-  }, []);
+  // useEffect(() => {
+  //   const storedSession = JSON.parse(localStorage.getItem('session'));
+  //   setSession(storedSession);
+  // }, []);
 
   // 로그아웃
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
+    userLogout();
 
     if (error) {
       AlertError('로그아웃 실패!', '그냥 계세요.');
       return;
     }
 
-    localStorage.removeItem('session');
-    setSession(null);
+    // localStorage.removeItem('session');
+    // setSession(null);
 
     AlertSuccess('로그아웃 성공!', '다음에 또 만나요!');
 
@@ -50,7 +54,7 @@ const Header = () => {
         </div>
 
         {/* Login / logout 버튼 */}
-        {session ? (
+        {isAuthenticated ? (
           <button
             onClick={handleLogout}
             className="bg-palette3 hover:bg-palette1 w-20 h-8 flex items-center justify-center rounded-2xl text-palette5 text-md font-medium font-montserrat transition-all duration-300"
