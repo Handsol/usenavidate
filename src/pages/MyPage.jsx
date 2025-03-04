@@ -9,23 +9,22 @@ const MyPage = () => {
   useEffect(() => {
     const session = JSON.parse(localStorage.getItem('session'));
     const userId = session.user.id;
-    const userNickname = session.user.user_metadata.nickname;
+
     console.log(session);
-    console.log(userNickname);
 
     const fetchPosts = async () => {
       // Supabase에서 게시글 데이터 불러오기
       const { data: postsData, error: postsError } = await supabase
         .from('posts')
         .select('*')
-        .eq('board_type', 'dateroute')
+        .eq('users_id', userId)
         .order('created_at', { ascending: false });
 
       if (postsError || !postsData) {
         console.error('게시글 불러오기 오류:', postsError);
         return;
       }
-      console.log(postsData);
+
       // 게시글 ID 리스트 가져오기
       const postIds = postsData.map((post) => post.posts_id);
 
@@ -39,18 +38,6 @@ const MyPage = () => {
         console.error('이미지 불러오기 오류:', photosError);
         return;
       }
-
-      // 작성자 닉네임 가져오기
-      const userIds = postsData.map((post) => post.users_id);
-      // const { data: usersData, error: usersError } = await supabase
-      //   .from('users')
-      //   .select('users_id, users_nickname')
-      //   .in('users_id', userId);
-
-      // if (usersError || !usersData) {
-      //   console.error('유저 닉네임 불러오기 오류:', usersError);
-      //   return;
-      // }
 
       // 데이터 매칭
       const formattedPosts = postsData.map((post) => {
