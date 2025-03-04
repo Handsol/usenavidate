@@ -23,12 +23,11 @@ export const ImageInput = () => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col w-full">
       {/* 이미지 업로드하기 */}
       <label htmlFor="input-file" className="addImage" onChange={handleAddImage}>
         <input type="file" ref={fileInputRef} />
         <div className="bg-slate-300" />
-        <span>사진추가</span>
       </label>
       {/* 업로드한 이미지가 존재할 때 이미지 미리보기 생성 */}
       {showImage !== null ? (
