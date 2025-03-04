@@ -12,8 +12,6 @@ const MyPage = () => {
     const session = JSON.parse(localStorage.getItem('session'));
     const userId = session.user.id;
 
-    console.log(session);
-
     const fetchPosts = async () => {
       // Supabase에서 게시글 데이터 불러오기
       const { data: postsData, error: postsError } = await supabase
