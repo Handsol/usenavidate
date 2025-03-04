@@ -20,6 +20,8 @@ export const ImageInput = () => {
       .upload(`public/avatar/${crypto.randomUUID()}`, uploadAvatar);
 
     setPublicUrl(`https://yaaahfifliqyixbtxbjn.supabase.co/storage/v1/object/public/profile-images//${data.path}`);
+
+    const { data: userData } = await supabase.from('users').eq('users_id', userId).update('').select();
   };
 
   return (
@@ -44,11 +46,7 @@ export const ImageInput = () => {
       ) : (
         // 기본 아바타 이미지
         <div className="bg-cover w-80 h-80">
-          <img
-            src={
-              'https://yaaahfifliqyixbtxbjn.supabase.co/storage/v1/object/public/profile-images//default-profile.jpg'
-            }
-          />
+          <img src={'/profile_img.png'} />
         </div>
       )}
     </div>
