@@ -11,6 +11,7 @@ import NaviTalkDetail from '../pages/detail/NaviTalkDetail';
 import DateRouteWritePage from '../pages/DateRouteWritePage';
 import ProfilePage from '../pages/ProfilePage';
 import { PATH } from './PATH';
+import SearchPage from '../pages/SearchPage';
 import ProtectRoute from '../components/ProtectRoute';
 
 const Router = () => {
@@ -38,6 +39,10 @@ const RouterContents = () => {
         <Route path={PATH.LOGIN} element={<LoginPage />} />
         <Route path={PATH.SIGNUP} element={<SignupPage />} />
         <Route path={PATH.NAVITALK} element={<NaviTalkPage />} />
+        <Route path={PATH.NAVITALKDETAIL} element={<NaviTalkDetail />} />
+        <Route path={PATH.DATEWRITE} element={<DateRouteWritePage />} />
+        <Route path={PATH.PROFILE} element={<ProfilePage />} />
+        <Route path={PATH.SEARCH} element={<SearchPage />} />
 
         {/* 로그인해야 이용할 수 있는 페이지 */}
         <Route
