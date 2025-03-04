@@ -31,9 +31,16 @@ const SignupPage = () => {
       }
     });
 
+    // error 안내 처리
     if (error) {
+      if (error.status === 422) {
+        AlertInfo('잠깐!', '이미 사용 중인 이메일입니다.');
+        return;
+      }
+
       switch (error.message) {
         case 'email_exists':
+          AlertInfo('잠깐!', '이미 사용 중인 이메일입니다.');
         case 'user_already_exists':
           AlertInfo('잠깐!', '이미 사용 중인 이메일입니다.');
           return;

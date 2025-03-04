@@ -20,13 +20,19 @@ const LoginPage = () => {
 
     const { data: loginData, error } = await supabase.auth.signInWithPassword({ email, password });
 
-    console.log(loginData);
-
+    // 예외처리
     if (error) {
+      if (error.status === 400) {
+        AlertError('로그인 실패!', '이메일 또는 비밀번호를 확인해주세요.');
+        return;
+      }
+
+      // 기타 error 처리
       AlertError('로그인 실패!', error.message);
       return;
     }
 
+    // 로그인 성공 알림
     AlertSuccess('로그인 성공!', '안녕하세요! 어디로 가볼까요?');
 
     // 로그인한 사용자 정보 local에 저장
