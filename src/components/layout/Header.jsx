@@ -4,7 +4,7 @@ import naviDateLogo from '/navi_date_purple.png';
 import { IoClose } from 'react-icons/io5';
 import { PATH } from '../../shared/PATH';
 import supabase from '../../supabase/Client';
-import { AlertSuccess } from '../../common/Alert';
+import { AlertSuccess, AlertError } from '../../common/Alert';
 
 const Header = () => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
