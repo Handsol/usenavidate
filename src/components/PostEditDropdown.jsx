@@ -1,7 +1,7 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/16/solid';
-import { useAuthUser } from '../supabase/SupabaseAuth';
 import { useNavigate } from 'react-router-dom';
+import { useAuthUser } from '../hooks/useAuthUser';
 
 const PostEditDropDown = ({ post, updatePost, deletePost }) => {
   const { user, loading } = useAuthUser();
