@@ -109,7 +109,7 @@ const LoginPage = () => {
                 }
               })}
             />
-            {errors.password && <p className="text-palette8 text-sm -mt-3">{errors.email.message}</p>}
+            {errors.password && <p className="text-palette8 text-sm -mt-3">{errors.password.message}</p>}
           </div>
 
           {/* 로그인 버튼 */}
