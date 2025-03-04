@@ -8,5 +8,5 @@ export const PATH = {
   DATEDETAIL: '/datedetail',
   DATEWRITE: '/datewrite',
   NAVITALK: '/navitalk',
-  NAVITALKDETAIL: '/navitalkdetail'
+  NAVITALKDETAIL: '/navitalkdetail/:id'
 };
