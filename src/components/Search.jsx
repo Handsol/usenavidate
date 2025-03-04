@@ -30,14 +30,15 @@ const Search = () => {
           </button>
         </section>
         {/* 검색어 추천 */}
-        <nav className="flex items-center justify-center">
-          <ul className="flex flex-row gap-4 font-semibold text-palette1 text-lg">
+        <nav className="flex items-center justify-center gap-4">
+          <p className="flex flex-row font-semibold text-palette1 text-lg cursor-default">추천 검색어 :</p>
+          <ul className="flex flex-row gap-3 font-semibold text-palette1 text-lg cursor-pointer">
             <li>#20대</li>
-            <li>#2030</li>
-            <li>#소개팅</li>
-            <li>#맛집투어</li>
-            <li>#DIY</li>
+            <li>#30대</li>
+            <li>#점심 식사</li>
             <li>#전시회</li>
+            <li>#서울</li>
+            <li>#경기</li>
           </ul>
         </nav>
       </div>
