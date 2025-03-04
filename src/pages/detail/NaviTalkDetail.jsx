@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import supabase from '../../supabase/Client';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
@@ -16,24 +15,14 @@ const NaviTalkDetail = () => {
   const [markers, setMarkers] = useState([]);
 
   const reviewStars = () => {
-    if (post.posts_review === 1) {
-      return '⭐';
-    } else if (post.posts_review === 2) {
-      return '⭐⭐';
-    } else if (post.posts_review === 3) {
-      return '⭐⭐⭐';
-    } else if (post.posts_review === 4) {
-      return '⭐⭐⭐⭐';
-    } else if (post.posts_review === 5) {
-      return '⭐⭐⭐⭐⭐';
-    }
+    if (!post) return '';
+    return '⭐'.repeat(post.posts_review);
   };
 
   // 게시글의 이미지 URL을 저장할 배열
-  const imageUrls =
-    post?.posts_img_url && post.posts_img_url.length > 0 ? [...post.posts_img_url] : ['/navi_talk_default.png'];
+  const imageUrls = post?.posts_img_url?.length > 0 ? [...post.posts_img_url] : ['/navi_talk_default.png'];
 
-  // 이미지가 5개 미만일 시 나타날 default 이미지 추가
+  // 이미지가 5개 미만일 경우 default 이미지 추가
   while (imageUrls.length < 5) {
     imageUrls.push('/navi_talk_default.png');
   }
