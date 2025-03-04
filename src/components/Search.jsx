@@ -41,7 +41,7 @@ const Search = () => {
             {['20대', '30대', '점심 식사', '전시회', '서울', '경기'].map((tag, index) => (
               <li
                 key={index}
-                onClick={() => handleTagClick(tag)} // ✅ 태그 클릭 시 검색 실행
+                onClick={() => handleTagClick(tag)}
                 className="cursor-pointer hover:underline"
               >
                 #{tag}

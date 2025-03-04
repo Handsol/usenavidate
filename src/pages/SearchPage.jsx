@@ -27,7 +27,7 @@ const SearchPage = () => {
       const formattedPosts = data.map((post) => ({
         ...post,
         posts_tag: post.posts_tag ? post.posts_tag.map((tag) => tag.tag_name) : [],
-        posts_img_url: post.posts_photos?.length > 0 ? post.posts_photos[0].posts_img_url : '/navi_talk_default.png' // ✅ 첫 번째 이미지만 가져오고 없으면 기본 이미지
+        posts_img_url: post.posts_photos?.length > 0 ? post.posts_photos[0].posts_img_url : '/navi_talk_default.png'
       }));
 
       setAllPosts(formattedPosts);
