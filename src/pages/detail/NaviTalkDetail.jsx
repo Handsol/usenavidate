@@ -77,7 +77,7 @@ const NaviTalkDetail = () => {
           <p className="flex w-full text-2xl font-semibold text-palette1">Location</p>
           <p>여기는 주소 어쩌구저쩌구 막 길쭉하게 스근하게 스르륵</p>
         </div>
-        <PostEditDropDown className="flex w-[50px]" />
+        <PostEditDropDown post={post} className="flex w-[50px]" />
       </div>
 
       {/* 지도 */}
