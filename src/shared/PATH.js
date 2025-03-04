@@ -6,7 +6,7 @@ export const PATH = {
   PROFILE: '/profile',
   SEARCH: '/search',
   WRITEPOST: '/writepost',
-  DATEDETAIL: '/datedetail',
+  DATEDETAIL: '/datedetail/:id',
   DATEWRITE: '/datewrite',
   NAVITALK: '/navitalk',
   NAVITALKDETAIL: '/navitalkdetail/:id'

@@ -3,53 +3,76 @@ import { useEffect, useState } from 'react';
 import UseKakaoLoader from '../components/UseKakaoLoader';
 import { AlertError, AlertSuccess } from '../common/Alert';
 import supabase from '../supabase/Client';
+import { Listbox, ListboxButton, ListboxOption, ListboxOptions, Transition } from '@headlessui/react';
+import useSelectFilters, { ageGroups, relations, locations, costOptions } from '../data/categoryData';
+import { Fragment } from 'react';
 
 const DateRouteWritePage = () => {
-  // 지도에 표시할 마커들의 좌표를 저장하는 상태
-  const [markers, setMarkers] = useState([]);
-  // 생성된 지도 인스턴스를 저장하는 상태
-  const [mapInstance, setMapInstance] = useState(null);
-  // 검색된 주소 문자열 저장
-  const [searchQuery, setSearchQuery] = useState('');
-  // Kakao Maps SDK가 로드되었는지 여부 확인
-  const [isKakaoLoaded, setIsKakaoLoaded] = useState(false);
-  // 선택한 장소 목록
-  const [places, setPlaces] = useState([]);
-  // 데이트 코스 제목
-  const [dateTitle, setDateTitle] = useState('');
-  // 데이트 코스 설명 상태
-  const [description, setDescription] = useState('');
-  // 키워드 검색 시 보여주는 리스트
-  const [searchResults, setSearchResults] = useState([]);
+  // useSelectFilters 훅을 사용하여 필터 상태 및 업데이트 함수를 가져옴
+  const {
+    selectedAgeGroup,
+    setSelectedAgeGroup,
+    selectedRelation,
+    setSelectedRelation,
+    selectedLocation,
+    setSelectedLocation,
+    selectedCost,
+    setSelectedCost
+  } = useSelectFilters();
 
-  // kakao Maps SDK 로드 여부 체크
+  // 지도에 표시할 마커(선택한 장소)들을 저장하는 상태
+  const [markers, setMarkers] = useState([]);
+  // 지도 인스턴스를 저장하여 이후에 지도 제어(예: panTo)할 때 사용
+  const [mapInstance, setMapInstance] = useState(null);
+  // 검색창에 입력한 주소 문자열을 저장하는 상태
+  const [searchQuery, setSearchQuery] = useState('');
+  // Kakao Maps SDK가 로드되었는지 여부를 저장하는 상태
+  const [isKakaoLoaded, setIsKakaoLoaded] = useState(false);
+  // 사용자가 선택한 장소 목록을 저장하는 상태
+  const [places, setPlaces] = useState([]);
+  // 데이트 코스 제목을 저장하는 상태
+  const [dateTitle, setDateTitle] = useState('');
+  // 데이트 코스 설명을 저장하는 상태
+  const [description, setDescription] = useState('');
+  // 주소 검색 결과 목록을 저장하는 상태
+  const [searchResults, setSearchResults] = useState([]);
+  // 이미지 저장 상태
+  const [selectedImages, setSelectedImages] = useState([]);
+  // 이미지 미리보기
+  const [imagePreviews, setImagePreviews] = useState([]);
+
+  // Kakao Maps SDK가 로드되었는지 체크하는 함수
   const checkKakaoLoaded = () => {
-    // window.kakao와 그 안의 maps가 존재하는지 확인
+    // window.kakao와 window.kakao.maps 객체가 존재하면 SDK가 로드된 상태
     if (window.kakao && window.kakao.maps) {
       setIsKakaoLoaded(true);
     } else {
-      // 안에 객체가 없다면 100ms 후에 다시 체크
+      // 존재하지 않으면 100ms 후에 다시 체크
       setTimeout(checkKakaoLoaded, 100);
     }
   };
-  // 컴포넌트 마운트 후에 Kakao Maps SDK가 로드되었는지 확인
+
+  // 컴포넌트가 마운트될 때 Kakao Maps SDK의 로드를 확인하기 위해 checkKakaoLoaded 호출
   useEffect(() => {
     checkKakaoLoaded();
   }, []);
 
-  // Map 컴포넌트 생성되면 호출, 지도 인스턴스 저장
+  // 지도 컴포넌트가 생성되면 호출되어 지도 인스턴스를 저장
   const onCreateMap = (map) => {
     setMapInstance(map);
   };
-  // 주소 목록 지우기 핸들러
+
+  // 선택된 장소를 삭제 해당 인덱스의 장소를 목록과 마커 리스트에서 제거
   const handleDeleteAddrList = (indexToDelete) => {
     // 주소 삭제하기
     setPlaces((prev) => prev.filter((_, i) => i !== indexToDelete));
     // 마커 삭제하기
     setMarkers((prev) => prev.filter((_, i) => i !== indexToDelete));
   };
-  // supabase에 데이터 저장하기 submit
+
+  // Supabase에 데이터를 저장
   const handleSubmit = async () => {
+    // 입력값 검증
     if (!dateTitle.trim()) {
       AlertError('제목을 입력해주세요');
       return;
@@ -62,8 +85,17 @@ const DateRouteWritePage = () => {
       AlertError('1개 이상의 장소를 선택해주세요');
       return;
     }
-
     try {
+      // 현재 로그인한 사용자 ID를 가져옴
+      const {
+        data: { user },
+        error: userError
+      } = await supabase.auth.getUser();
+      if (userError || !user) {
+        AlertError('로그인된 사용자를 찾을 수 없습니다.');
+        return;
+      }
+      const userId = user.id;
       //posts 테이블에 데이터 저장
       const { data: postData, error: postError } = await supabase
         .from('posts')
@@ -72,12 +104,12 @@ const DateRouteWritePage = () => {
             posts_title: dateTitle,
             posts_info: description,
             posts_review: 0,
-            users_id: '25ec2e69-6f73-41e5-acde-d12dfc1e835d', // 테스트용 user_id
-            posts_tags: '',
+            users_id: userId,
+            posts_value: selectedCost.name,
             board_type: 'dateroute'
           }
         ])
-        .select('posts_id') // posts_id 값 반환받기
+        .select('posts_id')
         .eq('board_type', 'dateroute')
         .single();
 
@@ -89,60 +121,127 @@ const DateRouteWritePage = () => {
         return;
       }
 
-      //posts_locations 테이블에 장소 정보 저장
+      // post_tag 테이블에 데이터 저장
+      const selectedTags = [
+        selectedAgeGroup.name, // 예: "10대"
+        selectedRelation.name, // 예: "부부"
+        selectedLocation.name // 예 : "서울"
+      ];
+      const tagData = selectedTags.map((tag) => ({
+        posts_id: postId,
+        tag_name: tag
+      }));
+
+      const { error: tagError } = await supabase.from('posts_tag').insert(tagData);
+      if (tagError) throw tagError;
+      //posts_locations 테이블에 장소 데이터 저장
       const locationData = places.map((place) => ({
         posts_id: postId,
-        posts_location_url: place.address // 주소를 posts_location_url 컬럼에 저장
+        posts_location_url: place.address,
+        posts_location_url_name: place.name
       }));
 
       const { error: locError } = await supabase.from('posts_locations').insert(locationData);
       if (locError) throw locError;
+      // posts_photos 테이블에 저장
+      if (selectedImages.length > 0) {
+        await uploadImages(postId);
+      }
 
       AlertSuccess('게시글이 성공적으로 등록되었습니다!');
     } catch (error) {
       AlertError(`등록 실패: ${error.message}`);
     }
   };
-  // Kakao Places API를 이용한 가게 이름 검색
+
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+
+    // 최대 5개 제한
+    if (files.length + selectedImages.length > 5) {
+      AlertError('이미지는 최대 5개까지 업로드할 수 있습니다.');
+      return;
+    }
+
+    // 새로운 이미지 추가
+    setSelectedImages((prevImages) => [...prevImages, ...files].slice(0, 5));
+
+    // 미리보기 이미지 생성
+    const previews = files.map((file) => URL.createObjectURL(file));
+    setImagePreviews((prevPreviews) => [...prevPreviews, ...previews].slice(0, 5));
+  };
+
+  const uploadImages = async (postId) => {
+    for (const image of selectedImages) {
+      const fileName = `${Date.now()}-${image.name}`;
+
+      // 스토리지에 이미지 업로드
+      const { data, error } = await supabase.storage.from('posts-photos').upload(fileName, image);
+
+      if (error) {
+        console.error('이미지 업로드 실패:', error);
+        continue;
+      }
+
+      // 업로드된 파일의 Public URL 가져오기
+      const { data: publicUrlData } = supabase.storage.from('posts-photos').getPublicUrl(fileName);
+      const imageUrl = publicUrlData.publicUrl;
+
+      // posts_photos 테이블에 이미지 URL 저장
+      const { error: photoError } = await supabase
+        .from('posts_photos')
+        .insert([{ posts_id: postId, posts_img_url: imageUrl }]);
+
+      if (photoError) {
+        console.error('posts_photos 테이블 저장 실패:', photoError);
+      }
+    }
+  };
+
+  // Kakao Places API를 사용하여 키워드로 장소 검색
   const handleSearchPlace = () => {
     if (!isKakaoLoaded) {
       AlertError('Kakao Maps API가 아직 로드되지 않았습니다.');
       return;
     }
 
+    // Places 서비스 객체 생성
     const ps = new window.kakao.maps.services.Places();
+    // 키워드 검색 메서드 호출: 검색 결과를 콜백으로 받음
     ps.keywordSearch(searchQuery, (data, status) => {
       if (status === window.kakao.maps.services.Status.OK) {
-        setSearchResults(data); // 검색 결과 업데이트
+        setSearchResults(data); // 검색 결과가 성공하면 상태 업데이트
       } else {
         AlertError('검색 결과를 찾을 수 없습니다.');
-        setSearchResults([]);
+        setSearchResults([]); // 실패 시 빈 배열로 초기화
       }
     });
   };
 
-  // 검색된 가게를 선택하면 지도에 추가
+  // 검색 결과에서 사용자가 선택한 장소를 지도에 추가
   const handleSelectPlace = (place) => {
-    const lat = parseFloat(place.y);
-    const lng = parseFloat(place.x);
+    const lat = parseFloat(place.y); // 위도 변환
+    const lng = parseFloat(place.x); // 경도 변환
 
     const newPlace = {
       lat,
       lng,
-      address: place.road_address_name || place.address_name,
+      address: place.road_address_name || place.address_name, // 도로명 주소 우선, 없으면 일반 주소 사용
       name: place.place_name
     };
 
+    // 지도 인스턴스가 있으면 해당 좌표로 지도 중심 이동
     if (mapInstance) {
       mapInstance.panTo(new window.kakao.maps.LatLng(lat, lng));
     }
 
+    // 마커와 선택된 장소 목록 업데이트
     setMarkers((prev) => [...prev, newPlace]);
     setPlaces((prev) => [...prev, newPlace]);
-    setSearchResults([]);
-    setSearchQuery('');
+    setSearchResults([]); // 검색 결과 초기화
+    setSearchQuery(''); // 검색창 초기화
 
-    // 모든 마커가 보이도록 지도 자동 확대/축소
+    // 모든 마커가 보이도록 지도 영역 자동 조정
     if (mapInstance) {
       const bounds = new window.kakao.maps.LatLngBounds();
       [...markers, newPlace].forEach((marker) => {
@@ -154,9 +253,9 @@ const DateRouteWritePage = () => {
 
   return (
     <div className="w-full h-screen flex overflow-hidden">
-      <div className="w-1/3 p-6 overflow-auto flex flex-col items-center">
+      <div className="w-1/2 p-6 overflow-auto flex flex-col items-center">
         <UseKakaoLoader />
-        {/* 제목 입력 */}
+        {/* 제목 및 검색 입력창 */}
         <div className="w-full max-w-sm flex flex-col items-center gap-2">
           <input
             type="text"
@@ -169,11 +268,12 @@ const DateRouteWritePage = () => {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="가게 이름을 입력하세요"
+            placeholder="가게명, 지명을 입력하세요"
             className="border p-3 w-full text-center rounded-lg cursor-pointer"
             onKeyDown={(e) => e.key === 'Enter' && handleSearchPlace()}
           />
         </div>
+        {/* 검색 결과 리스트 */}
         {searchResults.length > 0 && (
           <div className="w-full max-w-sm bg-white border rounded-lg shadow-lg mt-2">
             {searchResults.map((place, index) => (
@@ -187,13 +287,16 @@ const DateRouteWritePage = () => {
             ))}
           </div>
         )}
-        {/* 선택한 장소 목록 보여주기 */}
+        {/* 선택된 장소 목록 */}
         <div className="mt-6 w-full max-w-sm">
           {places.length === 0 ? (
             <p>선택된 장소가 없습니다.</p>
           ) : (
             places.map((place, index) => (
-              <div key={index} className="flex justify-between items-center border border-palette2 p-3 mt-2 rounded-lg">
+              <div
+                key={index}
+                className="flex justify-between items-center bg-palette5 border border-palette2 p-3 mt-2 rounded-lg"
+              >
                 <span>{place.name}</span>
                 <button onClick={() => handleDeleteAddrList(index)} className="text-palette8 text-lg">
                   삭제
@@ -202,9 +305,148 @@ const DateRouteWritePage = () => {
             ))
           )}
         </div>
-        {/* 코스 설명 */}
+        <div className="w-full flex flex-col items-center mt-4">
+          <input type="file" multiple accept="image/*" onChange={handleImageChange} className="mb-2" />
+
+          {/* 이미지 미리보기 */}
+          <div className="flex flex-wrap gap-4">
+            {imagePreviews.map((src, index) => (
+              <div key={index} className="relative w-[100px] h-[100px]">
+                <img src={src} alt="미리보기" className="w-full h-full object-cover rounded-lg shadow-md" />
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* Headlessui 사용 */}
+        <div className="flex flex-col">
+          <span className="text-palette2 font-bold text-[20px]">태그</span>{' '}
+          <div className="w-full pt-2 flex flex-row gap-5 justify-center">
+            <div className="w-40">
+              <Listbox value={selectedAgeGroup} onChange={setSelectedAgeGroup}>
+                <div className="relative">
+                  <ListboxButton className="relative w-full border-4 border-palette5 font-bold rounded-lg bg-inherit py-2 pl-3 pr-10 text-left text-palette2 focus:outline-none focus:ring-2 focus:ring-gray-500 transition">
+                    {selectedAgeGroup.name}
+                  </ListboxButton>
+                  <Transition
+                    as={Fragment}
+                    enter="transition-all duration-1000 ease-in-out"
+                    enterFrom="max-h-0 opacity-0"
+                    enterTo="max-h-96 opacity-100"
+                    leave="transition-all duration-1000 ease-in-out"
+                    leaveFrom="max-h-96 opacity-100"
+                    leaveTo="max-h-0 opacity-0"
+                  >
+                    <ListboxOptions className="absolute mt-2 w-full overflow-hidden rounded-lg bg-palette5 text-gray-600 shadow-lg">
+                      {ageGroups.map((option, index) => (
+                        <ListboxOption
+                          key={index}
+                          value={option}
+                          className="cursor-pointer select-none py-2 pl-3 pr-10 hover:bg-gray-400 hover:text-palette5 transition flex items-center justify-between"
+                        >
+                          {option.name}
+                        </ListboxOption>
+                      ))}
+                    </ListboxOptions>
+                  </Transition>
+                </div>
+              </Listbox>
+            </div>
+            <div className="w-40">
+              <Listbox value={selectedRelation} onChange={setSelectedRelation}>
+                <div className="relative">
+                  <ListboxButton className="relative w-full border-4 border-palette5 font-bold rounded-lg bg-inherit py-2 pl-3 pr-10 text-left text-palette2 focus:outline-none focus:ring-2 focus:ring-gray-500 transition">
+                    {selectedRelation.name}
+                  </ListboxButton>
+                  <Transition
+                    as={Fragment}
+                    enter="transition-all duration-1000 ease-in-out"
+                    enterFrom="max-h-0 opacity-0"
+                    enterTo="max-h-96 opacity-100"
+                    leave="transition-all duration-1000 ease-in-out"
+                    leaveFrom="max-h-96 opacity-100"
+                    leaveTo="max-h-0 opacity-0"
+                  >
+                    <ListboxOptions className="absolute mt-2 w-full overflow-hidden rounded-lg bg-palette5 text-gray-600 shadow-lg">
+                      {relations.map((option, index) => (
+                        <ListboxOption
+                          key={index}
+                          value={option}
+                          className="cursor-pointer select-none py-2 pl-3 pr-10 hover:bg-gray-400 hover:text-palette5 transition flex items-center justify-between"
+                        >
+                          {option.name}
+                        </ListboxOption>
+                      ))}
+                    </ListboxOptions>
+                  </Transition>
+                </div>
+              </Listbox>
+            </div>
+            <div className="w-40">
+              <Listbox value={selectedLocation} onChange={setSelectedLocation}>
+                <div className="relative">
+                  <ListboxButton className="relative w-full border-4 border-palette5 font-bold rounded-lg bg-inherit py-2 pl-3 pr-10 text-left text-palette2 focus:outline-none focus:ring-2 focus:ring-gray-500 transition">
+                    {selectedLocation.name}
+                  </ListboxButton>
+                  <Transition
+                    as={Fragment}
+                    enter="transition-all duration-1000 ease-in-out"
+                    enterFrom="max-h-0 opacity-0"
+                    enterTo="max-h-96 opacity-100"
+                    leave="transition-all duration-1000 ease-in-out"
+                    leaveFrom="max-h-96 opacity-100"
+                    leaveTo="max-h-0 opacity-0"
+                  >
+                    <ListboxOptions className="absolute mt-2 w-full overflow-hidden rounded-lg bg-palette5 text-gray-600 shadow-lg">
+                      {locations.map((option, index) => (
+                        <ListboxOption
+                          key={index}
+                          value={option}
+                          className="cursor-pointer select-none py-2 pl-3 pr-10 hover:bg-gray-400 hover:text-palette5 transition flex items-center justify-between"
+                        >
+                          {option.name}
+                        </ListboxOption>
+                      ))}
+                    </ListboxOptions>
+                  </Transition>
+                </div>
+              </Listbox>
+            </div>
+            <div className="w-40">
+              <Listbox value={selectedCost} onChange={setSelectedCost}>
+                <div className="relative">
+                  <ListboxButton className="relative w-full border-4 border-palette5 font-bold rounded-lg bg-inherit py-2 pl-3 pr-10 text-left text-palette2 focus:outline-none focus:ring-2 focus:ring-gray-500 transition">
+                    {selectedCost.name}
+                  </ListboxButton>
+                  <Transition
+                    as={Fragment}
+                    enter="transition-all duration-1000 ease-in-out"
+                    enterFrom="max-h-0 opacity-0"
+                    enterTo="max-h-96 opacity-100"
+                    leave="transition-all duration-1000 ease-in-out"
+                    leaveFrom="max-h-96 opacity-100"
+                    leaveTo="max-h-0 opacity-0"
+                  >
+                    <ListboxOptions className="absolute mt-2 w-full overflow-hidden rounded-lg bg-palette5 text-gray-600 shadow-lg">
+                      {costOptions.map((option, index) => (
+                        <ListboxOption
+                          key={index}
+                          value={option}
+                          className="cursor-pointer select-none py-2 pl-3 pr-10 hover:bg-gray-400 hover:text-palette5 transition flex items-center justify-between"
+                        >
+                          {option.name}
+                        </ListboxOption>
+                      ))}
+                    </ListboxOptions>
+                  </Transition>
+                </div>
+              </Listbox>
+            </div>
+          </div>
+        </div>
+
+        {/* 데이트 코스 설명 입력창 */}
         <textarea
-          className="border w-3/4 p-2 mt-4 resize-none"
+          className="border w-4/5 p-2 mt-4 resize-none"
           rows="4"
           placeholder="데이트 코스 설명을 입력하세요"
           value={description}
@@ -214,12 +456,12 @@ const DateRouteWritePage = () => {
         {/* 등록 버튼 */}
         <button
           onClick={() => handleSubmit()}
-          className="p-3 bg-palette1 text-palette5 w-full rounded-lg hover:bg-palette2 transition"
+          className="p-3 mt-10 bg-palette1 text-palette5 w-2/3 rounded-lg hover:bg-palette2 transition"
         >
           등록하기
         </button>
       </div>
-      <div className="w-2/3 h-full">
+      <div className="w-1/2 h-full">
         {/* 지도 출력 */}
         <Map
           id="map"
@@ -236,4 +478,5 @@ const DateRouteWritePage = () => {
     </div>
   );
 };
+
 export default DateRouteWritePage;

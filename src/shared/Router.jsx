@@ -12,6 +12,7 @@ import DateRouteWritePage from '../pages/DateRouteWritePage';
 import ProfilePage from '../pages/ProfilePage';
 import { PATH } from './PATH';
 import SearchPage from '../pages/SearchPage';
+import ProtectRoute from '../components/ProtectRoute';
 
 const Router = () => {
   return (
@@ -33,17 +34,65 @@ const RouterContents = () => {
   return (
     <div className={`${fullScreenPages.includes(location.pathname) ? '' : 'pt-20'}`}>
       <Routes>
+        {/* 누구나 접근 가능한 페이지 */}
         <Route path={PATH.HOME} element={<DateRoutePage />} />
         <Route path={PATH.LOGIN} element={<LoginPage />} />
         <Route path={PATH.SIGNUP} element={<SignupPage />} />
-        <Route path={PATH.MYPAGE} element={<MyPage />} />
-        <Route path={PATH.DATEDETAIL} element={<DateRouteDetail />} />
-        <Route path={PATH.WRITEPOST} element={<WritePostPage />} />
         <Route path={PATH.NAVITALK} element={<NaviTalkPage />} />
         <Route path={PATH.NAVITALKDETAIL} element={<NaviTalkDetail />} />
         <Route path={PATH.DATEWRITE} element={<DateRouteWritePage />} />
         <Route path={PATH.PROFILE} element={<ProfilePage />} />
         <Route path={PATH.SEARCH} element={<SearchPage />} />
+
+        {/* 로그인해야 이용할 수 있는 페이지 */}
+        <Route
+          path={PATH.MYPAGE}
+          element={
+            <ProtectRoute>
+              <MyPage />
+            </ProtectRoute>
+          }
+        />
+        <Route
+          path={PATH.DATEDETAIL}
+          element={
+            <ProtectRoute>
+              <DateRouteDetail />
+            </ProtectRoute>
+          }
+        />
+        <Route
+          path={PATH.WRITEPOST}
+          element={
+            <ProtectRoute>
+              <WritePostPage />
+            </ProtectRoute>
+          }
+        />
+        <Route
+          path={PATH.NAVITALKDETAIL}
+          element={
+            <ProtectRoute>
+              <NaviTalkDetail />
+            </ProtectRoute>
+          }
+        />
+        <Route
+          path={PATH.DATEWRITE}
+          element={
+            <ProtectRoute>
+              <DateRouteWritePage />
+            </ProtectRoute>
+          }
+        />
+        <Route
+          path={PATH.PROFILE}
+          element={
+            <ProtectRoute>
+              <ProfilePage />
+            </ProtectRoute>
+          }
+        />
       </Routes>
     </div>
   );
