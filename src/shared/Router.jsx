@@ -11,6 +11,7 @@ import NaviTalkDetail from '../pages/detail/NaviTalkDetail';
 import DateRouteWritePage from '../pages/DateRouteWritePage';
 import ProfilePage from '../pages/ProfilePage';
 import { PATH } from './PATH';
+import SearchPage from '../pages/SearchPage';
 
 const Router = () => {
   return (
