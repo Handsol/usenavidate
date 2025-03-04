@@ -4,6 +4,7 @@ export const PATH = {
   SIGNUP: '/signup',
   MYPAGE: '/mypage',
   PROFILE: '/profile',
+  SEARCH: '/search',
   WRITEPOST: '/writepost',
   DATEDETAIL: '/datedetail/:id',
   DATEWRITE: '/datewrite',
