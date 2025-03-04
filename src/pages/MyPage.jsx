@@ -21,7 +21,6 @@ const MyPage = () => {
           내가 작성한 게시글
         </div>{' '}
         {/* 데이트 코스 포스트(피드) 리스트 레이아웃 그대로 가져올 예정 */}
-        {/* supabase 확인용으로 user 가입 정보로 작성했으니 예시로만 봐주세요  */}
         <div className="flex flex-shrink-0 flex-wrap justify-center gap-12 pt-2 mt-2">
           {userData.map((item) => (
             <div className="bg-palette5 self-center w-10% h-10% p-2 rounded-2xl" key={item.user_id}>
