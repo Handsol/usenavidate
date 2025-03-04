@@ -8,13 +8,6 @@ const ProfileForm = () => {
     password: ''
   });
 
-  // users 테이블 업데이트 로직
-  // const { data, error } = await supabase
-  // .from('users')
-  // .update({ other_column: 'otherValue' })
-  // .eq('some_column', 'someValue')
-  // .select()
-
   // upsert (true) > 없는 파일이면 insert > 있는 파일이면 update
 
   useEffect(() => {
@@ -32,7 +25,10 @@ const ProfileForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const updateUserData = async () => {
-      const { error } = await supabase.auth.updateUser(formData);
+      const authData = JSON.parse(localStorage.getItem('session')).user;
+      const userEmail = authData.email;
+      const { data, error } = await supabase.from('users').eq('users_email', userEmail).upsert(formData).select();
+
       if (error) {
         console.error('오류 발생', error);
         alert('업데이트 오류');
@@ -51,7 +47,7 @@ const ProfileForm = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-  console.log(userData);
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="flex flex-col text-palette6 w-full p-4">
