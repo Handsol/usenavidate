@@ -1,11 +1,30 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import supabase from '../supabase/Client';
 
 const ProfileForm = () => {
+  const [userData, setUserData] = useState();
   const [formData, setFormData] = useState({
     nickname: '',
     password: ''
   });
+
+  // users 테이블 업데이트 로직
+  // const { data, error } = await supabase
+  // .from('users')
+  // .update({ other_column: 'otherValue' })
+  // .eq('some_column', 'someValue')
+  // .select()
+
+  useEffect(() => {
+    const getUserData = async () => {
+      const session = JSON.parse(localStorage.getItem('session'));
+      const authData = session.user.user_metadata;
+      const userEmail = authData.email;
+      const { data, error } = await supabase.from('users').select('*').eq('users_email', userEmail);
+      setUserData(data);
+    };
+    getUserData();
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -34,27 +53,26 @@ const ProfileForm = () => {
     <form onSubmit={handleSubmit}>
       <div className="flex flex-col text-palette6 w-full p-4">
         <div className="flex flex-col gap-3">
-          <label className="text-palette1 text-1xl font-semibold">ID</label>
+          <label className="text-palette1 text-1xl font-semibold">EMAIL</label>
           <input
             type="text"
-            name="id"
             className="border-4 border-white rounded-lg bg-palette5 p-2 placeholder-palette2"
-            placeholder="ID"
+            placeholder={`${userData.users_email}`}
             disabled
           />
-          <span className="text-sm text-palette8">ID는 변경할 수 없습니다.</span>
+          <span className="text-sm text-palette8">e-mail은 변경할 수 없습니다.</span>
           <label className="text-palette1 text-1xl font-semibold">Nickname</label>
           <input
             type="text"
             name="nickname"
             className="border-4 border-white rounded-lg bg-inherit p-2 placeholder-palette2"
-            placeholder="닉네임"
+            placeholder={`${userData?.users_nickname}`}
             value={formData.nickname}
             onChange={handleChange}
           />
           <label className="text-palette1 text-1xl font-semibold">password</label>
           <input
-            type="text"
+            type="password"
             name="password"
             className="border-4 border-white rounded-lg bg-inherit p-2 placeholder-palette2"
             placeholder="password"
