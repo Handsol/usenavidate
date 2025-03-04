@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { ImageInput } from '../components/ImageInput';
 import ProfileForm from '../components/ProfileForm';
 
 const ProfilePage = () => {
+  const [publicUrl, setPublicUrl] = useState('');
   return (
     <>
       <div className="flex flex-row justify-center pt-5">
@@ -12,9 +14,9 @@ const ProfilePage = () => {
       <div className="flex flex-row justify-center text-left w-full pt-5 px-40">
         <div className="flex flex-col text-center text-palette6 p-4">
           <p className="text-left text-palette1 text-1xl font-semibold">Profile</p>
-          <ImageInput />
+          <ImageInput setPublicUrl={setPublicUrl} />
         </div>
-        <ProfileForm />
+        <ProfileForm publicUrl={publicUrl} />
       </div>
     </>
   );

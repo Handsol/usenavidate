@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import supabase from '../supabase/Client';
 
-const ProfileForm = () => {
+const ProfileForm = ({ publicUrl }) => {
   const [userData, setUserData] = useState();
   const [formData, setFormData] = useState({
-    nickname: '',
-    password: ''
+    users_avatar: null,
+    users_nickname: ''
   });
 
   // upsert (true) > 없는 파일이면 insert > 있는 파일이면 update
@@ -26,8 +26,12 @@ const ProfileForm = () => {
     e.preventDefault();
     const updateUserData = async () => {
       const authData = JSON.parse(localStorage.getItem('session')).user;
-      const userEmail = authData.email;
-      const { data, error } = await supabase.from('users').eq('users_email', userEmail).upsert(formData).select();
+      const userId = authData.id;
+      const { data: userData, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('users_id', userId)
+        .upsert({ users_nickname: formData, users_avatar: publicUrl });
 
       if (error) {
         console.error('오류 발생', error);
@@ -35,8 +39,7 @@ const ProfileForm = () => {
       } else {
         alert('업데이트 완료');
         setFormData({
-          nickname: '',
-          password: ''
+          nickname: ''
         });
       }
     };
@@ -66,16 +69,7 @@ const ProfileForm = () => {
             name="nickname"
             className="border-4 border-white rounded-lg bg-inherit p-2 placeholder-palette2"
             placeholder={`${userData?.users_nickname}`}
-            value={formData.nickname}
-            onChange={handleChange}
-          />
-          <label className="text-palette1 text-1xl font-semibold">password</label>
-          <input
-            type="password"
-            name="password"
-            className="border-4 border-white rounded-lg bg-inherit p-2 placeholder-palette2"
-            placeholder="password"
-            value={formData.password}
+            value={formData.users_nickname}
             onChange={handleChange}
           />
         </div>

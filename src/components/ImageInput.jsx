@@ -1,10 +1,9 @@
 import { useRef, useState } from 'react';
 import supabase from '../supabase/Client';
 
-export const ImageInput = () => {
+export const ImageInput = ({ setPublicUrl }) => {
   const [showImage, setShowImage] = useState(null);
   const [uploadAvatar, setUploadAvatar] = useState('');
-  const [publicUrl, setPublicUrl] = useState('');
   const fileInputRef = useRef(null);
 
   const handleAddImage = async (e) => {
