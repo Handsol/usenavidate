@@ -101,7 +101,7 @@ const DateRouteWritePage = () => {
             posts_info: description,
             posts_review: 0,
             users_id: userId,
-            posts_tags: '',
+            posts_value: selectedCost.name,
             board_type: 'dateroute'
           }
         ])
@@ -116,8 +116,20 @@ const DateRouteWritePage = () => {
         AlertError('게시글 ID를 찾을 수 없습니다.');
         return;
       }
+      // post_tag 테이블에 데이터 저장
+      const selectedTags = [
+        selectedAgeGroup.name, // 예: "10대"
+        selectedRelation.name, // 예: "부부"
+        selectedLocation.name // 예 : "서울"
+      ];
+      const tagData = selectedTags.map((tag) => ({
+        posts_id: postId,
+        tag_name: tag
+      }));
 
-      //posts_locations 테이블에 장소 정보 저장
+      const { error: tagError } = await supabase.from('posts_tag').insert(tagData);
+      if (tagError) throw tagError;
+      //posts_locations 테이블에 장소 데이터 저장
       const locationData = places.map((place) => ({
         posts_id: postId,
         posts_location_url: place.address
