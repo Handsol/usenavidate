@@ -51,12 +51,22 @@ const NaviTalkPage = () => {
         return;
       }
 
+      // 게시글 태그(옵션) 불러오기
+      const { data: tagsData, error: tagsError } = await supabase.from('posts_tag').select('*');
+      // .in('posts_id', postIds);
+
+      if (tagsError || !tagsData) {
+        console.error('태그 불러오기 오류:', tagsError);
+        return;
+      }
+
       // 데이터 매칭
       const formattedPosts = postsData.map((post) => {
         return {
           ...post,
           posts_img_url: photosData?.find((photo) => photo.posts_id === post.posts_id)?.posts_img_url || null,
-          users_nickname: usersData?.find((user) => user.users_id === post.users_id)?.users_nickname || '닉네임 없음'
+          users_nickname: usersData?.find((user) => user.users_id === post.users_id)?.users_nickname || '닉네임 없음',
+          posts_tag: tagsData.filter((tag) => tag.posts_id === post.posts_id).map((tag) => tag.tag_name)
         };
       });
 

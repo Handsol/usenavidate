@@ -11,7 +11,6 @@ import NaviTalkDetail from '../pages/detail/NaviTalkDetail';
 import DateRouteWritePage from '../pages/DateRouteWritePage';
 import ProfilePage from '../pages/ProfilePage';
 import { PATH } from './PATH';
-import ProtectRoute from '../components/ProtectRoute';
 
 const Router = () => {
   return (
