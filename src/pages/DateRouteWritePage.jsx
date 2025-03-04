@@ -36,6 +36,10 @@ const DateRouteWritePage = () => {
   const [description, setDescription] = useState('');
   // 주소 검색 결과 목록을 저장하는 상태
   const [searchResults, setSearchResults] = useState([]);
+  // 이미지 저장 상태
+  const [selectedImages, setSelectedImages] = useState([]);
+  // 이미지 미리보기
+  const [imagePreviews, setImagePreviews] = useState([]);
 
   // Kakao Maps SDK가 로드되었는지 체크하는 함수
   const checkKakaoLoaded = () => {
@@ -116,6 +120,7 @@ const DateRouteWritePage = () => {
         AlertError('게시글 ID를 찾을 수 없습니다.');
         return;
       }
+
       // post_tag 테이블에 데이터 저장
       const selectedTags = [
         selectedAgeGroup.name, // 예: "10대"
@@ -132,15 +137,64 @@ const DateRouteWritePage = () => {
       //posts_locations 테이블에 장소 데이터 저장
       const locationData = places.map((place) => ({
         posts_id: postId,
-        posts_location_url: place.address
+        posts_location_url: place.address,
+        posts_location_url_name: place.name
       }));
 
       const { error: locError } = await supabase.from('posts_locations').insert(locationData);
       if (locError) throw locError;
+      // posts_photos 테이블에 저장
+      if (selectedImages.length > 0) {
+        await uploadImages(postId);
+      }
 
       AlertSuccess('게시글이 성공적으로 등록되었습니다!');
     } catch (error) {
       AlertError(`등록 실패: ${error.message}`);
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+
+    // 최대 5개 제한
+    if (files.length + selectedImages.length > 5) {
+      AlertError('이미지는 최대 5개까지 업로드할 수 있습니다.');
+      return;
+    }
+
+    // 새로운 이미지 추가
+    setSelectedImages((prevImages) => [...prevImages, ...files].slice(0, 5));
+
+    // 미리보기 이미지 생성
+    const previews = files.map((file) => URL.createObjectURL(file));
+    setImagePreviews((prevPreviews) => [...prevPreviews, ...previews].slice(0, 5));
+  };
+
+  const uploadImages = async (postId) => {
+    for (const image of selectedImages) {
+      const fileName = `${Date.now()}-${image.name}`;
+
+      // 스토리지에 이미지 업로드
+      const { data, error } = await supabase.storage.from('posts-photos').upload(fileName, image);
+
+      if (error) {
+        console.error('이미지 업로드 실패:', error);
+        continue;
+      }
+
+      // 업로드된 파일의 Public URL 가져오기
+      const { data: publicUrlData } = supabase.storage.from('posts-photos').getPublicUrl(fileName);
+      const imageUrl = publicUrlData.publicUrl;
+
+      // posts_photos 테이블에 이미지 URL 저장
+      const { error: photoError } = await supabase
+        .from('posts_photos')
+        .insert([{ posts_id: postId, posts_img_url: imageUrl }]);
+
+      if (photoError) {
+        console.error('posts_photos 테이블 저장 실패:', photoError);
+      }
     }
   };
 
@@ -199,7 +253,7 @@ const DateRouteWritePage = () => {
 
   return (
     <div className="w-full h-screen flex overflow-hidden">
-      <div className="w-1/3 p-6 overflow-auto flex flex-col items-center">
+      <div className="w-1/2 p-6 overflow-auto flex flex-col items-center">
         <UseKakaoLoader />
         {/* 제목 및 검색 입력창 */}
         <div className="w-full max-w-sm flex flex-col items-center gap-2">
@@ -251,7 +305,19 @@ const DateRouteWritePage = () => {
             ))
           )}
         </div>
-        {/* Headlessui 사용 CustomSelect 컴포넌트 사용 */}
+        <div className="w-full flex flex-col items-center mt-4">
+          <input type="file" multiple accept="image/*" onChange={handleImageChange} className="mb-2" />
+
+          {/* 이미지 미리보기 */}
+          <div className="flex flex-wrap gap-4">
+            {imagePreviews.map((src, index) => (
+              <div key={index} className="relative w-[100px] h-[100px]">
+                <img src={src} alt="미리보기" className="w-full h-full object-cover rounded-lg shadow-md" />
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* Headlessui 사용 */}
         <div className="flex flex-col">
           <span className="text-palette2 font-bold text-[20px]">태그</span>{' '}
           <div className="w-full pt-2 flex flex-row gap-5 justify-center">
@@ -395,7 +461,7 @@ const DateRouteWritePage = () => {
           등록하기
         </button>
       </div>
-      <div className="w-2/3 h-full">
+      <div className="w-1/2 h-full">
         {/* 지도 출력 */}
         <Map
           id="map"
