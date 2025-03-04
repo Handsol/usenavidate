@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import supabase from '../supabase/Client';
+import { useNavigate } from 'react-router-dom';
 
 const useFetchPostDetail = (postId) => {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // postId가 없으면 실행되지 않음
@@ -47,7 +49,33 @@ const useFetchPostDetail = (postId) => {
     fetchPost();
   }, [postId]);
 
-  return { post, loading };
+  // 게시글 수정 로직
+  const updatePost = async (updatedData) => {
+    const { data, error } = await supabase.from('posts').update(updatedData).eq('posts_id', postId);
+
+    if (error) {
+      console.error('게시글 수정 오류', error);
+      return false;
+    }
+
+    setPost((prev) => ({ ...prev, ...updatedData }));
+    return true;
+  };
+
+  // 게시글 삭제 로직
+  const deletePost = async () => {
+    const { error } = await supabase.from('posts').delete().eq('posts_id', postId);
+
+    if (error) {
+      console.error('게시글 삭제 오류', error);
+      return false;
+    }
+
+    navigate(-1);
+    return true;
+  };
+
+  return { post, loading, updatePost, deletePost };
 };
 
 export default useFetchPostDetail;
