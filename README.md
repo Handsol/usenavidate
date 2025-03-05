@@ -103,16 +103,17 @@
 
 ## 팀 구성🫂
 
-| 팀원   | 담당파트                   | GitHub                                         | 블로그                                            |
-| ------ | -------------------------- | ---------------------------------------------- | ------------------------------------------------- |
-| 구본승 | Detail, Edit 페이지 담당   | [본승 Github](https://github.com/bonseung-dev) | [본승 블로그](https://velog.io/@meeseeks99/posts) |
-| 김도현 | Login, SignUp 페이지 담당  | [도현 Github](https://github.com/woodie2933)   | [도현 블로그](https://velog.io/@doni_kim/posts)   |
-| 이한솔 | Home, AddModal 페이지 담당 | [한솔 Github](https://github.com/Handsol)      | [한솔 블로그](https://sol09-29.tistory.com/)      |
-| 이록기 | MyPage 페이지 담당         | [록기 Github](https://github.com/dlfhrrl12)    | [록기 블로그](https://tigulmoa.tistory.com/)      |
-| 박나현 | Feed 페이지 담당           | [나현 Github](https://github.com/pnh135)       | [나현 블로그](https://velog.io/@pna9904/posts)    |
+| 팀원   | 담당파트                                         | GitHub                                         | 블로그                                            |
+| ------ | ------------------------------------------------ | ---------------------------------------------- | ------------------------------------------------- |
+| 구본승 | KAKAO MAP-API, DateRoute 게시글 Detail 페이지 담당 | [본승 Github](https://github.com/bonseung-dev) | [본승 블로그](https://velog.io/@meeseeks99/posts) |
+| 김도현 | 전체 레이아웃, Home, Login, SignUp 페이지 담당  | [도현 Github](https://github.com/woodie2933)   | [도현 블로그](https://velog.io/@doni_kim/posts)   |
+| 이한솔 | NaviTalk 게시판, 게시글 페이지 담당             | [한솔 Github](https://github.com/Handsol)      | [한솔 블로그](https://sol09-29.tistory.com/)      |
+| 이록기 | NaviTalk 게시글, NaviTalk 게시글 Detail 페이지 담당 | [록기 Github](https://github.com/dlfhrrl12)    | [록기 블로그](https://tigulmoa.tistory.com/)      |
+| 박나현 | MyPage 페이지, Profile 수정 페이지 담당         | [나현 Github](https://github.com/pnh135)       | [나현 블로그](https://velog.io/@pna9904/posts)    |
 
 <br />
 
 ## 트러블 슈팅 & 작업 후기🧑‍💻
 
-https://velog.io/@doni_kim/%EB%A6%AC%EC%95%A1%ED%8A%B8-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EC%99%80-%EC%86%8C%EC%86%8C%ED%95%9C-%ED%8A%B8%EB%9F%AC%EB%B8%94%EB%93%A4-1
+- [트러블 슈팅 #1](https://velog.io/@doni_kim/%EB%A6%AC%EC%95%A1%ED%8A%B8-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EC%99%80-%EC%86%8C%EC%86%8C%ED%95%9C-%ED%8A%B8%EB%9F%AC%EB%B8%94%EB%93%A4-1)
+- [트러블 슈팅 #2](https://velog.io/@pna9904/1-API-접근은-되는데-왜-받아지는-데이터가-없죠)
