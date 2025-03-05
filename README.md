@@ -105,8 +105,8 @@
 
 | 팀원   | 담당파트                   | GitHub                                         | 블로그                                            |
 | ------ | -------------------------- | ---------------------------------------------- | ------------------------------------------------- |
-| 구본승 | Login, SignUp 페이지 담당  | [본승 Github](https://github.com/bonseung-dev) | [본승 블로그](https://velog.io/@meeseeks99/posts) |
-| 김도현 | Detail, Edit 페이지 담당   | [도현 Github](https://github.com/woodie2933)   | [도현 블로그](https://velog.io/@doni_kim/posts)   |
+| 구본승 | Detail, Edit 페이지 담당   | [본승 Github](https://github.com/bonseung-dev) | [본승 블로그](https://velog.io/@meeseeks99/posts) |
+| 김도현 | Login, SignUp 페이지 담당  | [도현 Github](https://github.com/woodie2933)   | [도현 블로그](https://velog.io/@doni_kim/posts)   |
 | 이한솔 | Home, AddModal 페이지 담당 | [한솔 Github](https://github.com/Handsol)      | [한솔 블로그](https://sol09-29.tistory.com/)      |
 | 이록기 | MyPage 페이지 담당         | [록기 Github](https://github.com/dlfhrrl12)    | [록기 블로그](https://tigulmoa.tistory.com/)      |
 | 박나현 | Feed 페이지 담당           | [나현 Github](https://github.com/pnh135)       | [나현 블로그](https://velog.io/@pna9904/posts)    |
