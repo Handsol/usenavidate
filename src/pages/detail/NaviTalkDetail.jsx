@@ -14,6 +14,7 @@ const NaviTalkDetail = () => {
   const [mapCenter, setMapCenter] = useState({ lat: 37.546416, lng: 127.045646 });
   // 지도에 표시할 마커들의 좌표 리스트 저장
   const [markers, setMarkers] = useState([]);
+  const [tags, setTags] = useState([]);
 
   const reviewStars = () => {
     if (!post) return '';
@@ -89,6 +90,11 @@ const NaviTalkDetail = () => {
       if (locData.length > 0) {
         kakaoAdressMarkers(locData);
       }
+
+      // 태그 데이터 불러오기
+      const { data: tagData, error: tagError } = await supabase.from('posts_tag').select('tag_name').eq('posts_id', id);
+      if (tagError) console.error('태그 불러오기 오류:', tagError);
+      else setTags(tagData.map((tag) => tag.tag_name));
 
       // 이미지 불러오기
       const { data: photosData, error: photosError } = await supabase
@@ -167,12 +173,12 @@ const NaviTalkDetail = () => {
         </div>
         <div className="flex flex-col w-full gap-1">
           <p className="flex text-xl font-semibold text-palette1 pl-3">태그</p>
-          <div className="flex w-full h-[60px] border-4 border-palette5 text-2xl items-center rounded-3xl pl-5">
-            {(typeof post.posts_tags === 'string' ? post.posts_tags.split(',') : post.posts_tags || []).map(
-              (tag, index) => (
-                <p key={index}>#{tag}</p>
-              )
-            )}
+          <div className="w-full h-[60px] border-4 border-palette5 text-2xl flex items-center rounded-3xl pl-5">
+            {tags.map((tag, index) => (
+              <span key={index} className="mr-2">
+                #{tag}
+              </span>
+            ))}
           </div>
         </div>
         <div className="flex flex-col w-full gap-1">
