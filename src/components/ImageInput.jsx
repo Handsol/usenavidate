@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import supabase from '../supabase/Client';
-import { useAuthUser } from '../supabase/SupabaseAuth';
+import { useAuthUser } from '../hooks/useAuthUser';
+import { AlertInfo } from '../common/Alert';
 
 export const ImageInput = ({ setPublicUrl }) => {
   const [showImage, setShowImage] = useState(null);
@@ -14,16 +15,20 @@ export const ImageInput = ({ setPublicUrl }) => {
     setUploadAvatar(avatar_image);
   };
 
-  const { user, loading } = useAuthUser();
+  const { user } = useAuthUser();
 
-  if (loading) return null;
+  console.log(user);
 
   const handleUploadImage = async () => {
-    const { data, error } = await supabase.storage
+    const { data: imageData, error } = await supabase.storage
       .from('profile-images')
       .upload(`public/avatar/${crypto.randomUUID()}`, uploadAvatar);
-
-    setPublicUrl(`https://yaaahfifliqyixbtxbjn.supabase.co/storage/v1/object/public/profile-images//${data.path}`);
+    if (!error) {
+      AlertInfo('이미지 업로드 완료');
+      setPublicUrl(
+        `https://yaaahfifliqyixbtxbjn.supabase.co/storage/v1/object/public/profile-images//${imageData.path}`
+      );
+    }
   };
 
   return (
