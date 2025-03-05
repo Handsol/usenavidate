@@ -9,10 +9,10 @@ const DateRoutePage = () => {
   const { posts, loading } = useFetchPosts(boardType);
 
   return (
-    <div className="flex-col h-[100vh] max-w-[1300px] mx-auto bg-palette4">
+    <div className="flex-col h-[100vh] max-w-[1200px] mx-auto bg-palette4">
       <Search />
       {loading ? (
-        <p className="text-center text-lg text-palette1 mt-10">로딩 중...</p>
+        <p className="flex flex-col justify-center items-center text-center text-lg text-palette1 mt-10">로딩 중...</p>
       ) : (
         <PostList posts={posts} boardType={boardType} />
       )}

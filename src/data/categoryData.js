@@ -49,11 +49,11 @@ export const relations = [
 ];
 
 export const costOptions = [
-  { id: 1, name: '1~3만원' },
-  { id: 2, name: '3~5만원' },
-  { id: 3, name: '5~10만원' },
-  { id: 4, name: '10~20만원' },
-  { id: 5, name: '20~30만원' },
+  { id: 1, name: '1-3만원' },
+  { id: 2, name: '3-5만원' },
+  { id: 3, name: '5-10만원' },
+  { id: 4, name: '10-20만원' },
+  { id: 5, name: '20-30만원' },
   { id: 6, name: '30만원 이상' }
 ];
 

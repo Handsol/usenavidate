@@ -5,19 +5,19 @@ const DateRoutePost = ({ post }) => {
   return (
     <Link
       to={PATH.DATEDETAIL.replace(':id', post.posts_id)}
-      className="relative h-[250px] rounded-3xl overflow-hidden cursor-pointer"
+      className="relative h-52 rounded-3xl overflow-hidden cursor-pointer"
     >
       <img className="absolute inset-0 w-full h-full object-cover items-center" src={post.posts_img_url} alt="이미지" />
-      <section className="absolute bottom-0 w-full h-[100px] flex-col gap-3 bg-palette5">
-        <div className="flex flex-row w-full h-[50%] items-center justify-between px-2">
-          <div className="flex w-full text-2xl font-semibold truncate">{post.posts_title}</div>
-          <div className="flex text-xl font-medium flex-shrink-0">⭐{post.posts_review}</div>
+      <section className="absolute bottom-0 w-full h-24 flex-col bg-palette5">
+        <div className="flex flex-row w-full h-1/2 items-center justify-between px-4 pt-2">
+          <div className="flex w-full text-xl text-palette7 font-semibold">{post.posts_title}</div>
+          <div className="flex text-md font-semibold flex-shrink-0 text-palette7">⭐{post.posts_review}</div>
         </div>
-        <div className="flex flex-row w-full h-[50%] items-center justify-between px-2">
-          <div className="flex w-full text-lg truncate">
-            <ul className="flex flex-row gap-2">
+        <div className="flex flex-row w-full h-1/2 items-center justify-between px-4 pb-3">
+          <div className="flex w-full">
+            <ul className="flex gap-2">
               {post.posts_tag.map((tag, index) => (
-                <span key={index} className="px-2 py-1 bg-gray-200 rounded-lg text-sm">
+                <span key={index} className="px-2 py-1 bg-[#8985cc] rounded-md font-medium text-sm text-palette5">
                   #{tag}
                 </span>
               ))}
