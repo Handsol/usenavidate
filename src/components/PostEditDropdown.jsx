@@ -1,11 +1,9 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/16/solid';
-import { useNavigate } from 'react-router-dom';
 import { useAuthUser } from '../hooks/useAuthUser';
 
-const PostEditDropDown = ({ post, updatePost, deletePost }) => {
-  const { user, loading } = useAuthUser();
-  const navigate = useNavigate();
+const PostEditDropDown = ({ post, deletePost }) => {
+  const { user } = useAuthUser();
 
   return (
     user?.id === post.users_id && (
@@ -16,11 +14,11 @@ const PostEditDropDown = ({ post, updatePost, deletePost }) => {
         <MenuItems
           transition
           anchor="bottom end"
-          className="w-64 origin-top-right rounded-xl border border-white/5 bg-white p-2 text-lg text-palette3 transition-all duration-200 ease-out transform translate-y-5 opacity-0 data-[open]:translate-y-0 data-[open]:opacity-100 [--anchor-gap:10px] focus:outline-none"
+          className="w-64 origin-top-right rounded-xl border border-white/5 bg-white p-2 text-lg text-palette3 transition-all duration-200 ease-out transform translate-y-5 opacity-0 data-[open]:translate-y-0 data-[open]:opacity-100 [--anchor-gap:10px] focus:outline-none z-10"
         >
           <MenuItem>
             <button
-              onClick={() => navigate(`/edit/${post.posts_id}`)}
+              onClick={() => alert('아직 준비 중인 기능입니다...')}
               className="group flex w-full items-center gap-3 rounded-lg py-2 px-4 hover:bg-gray-100"
             >
               <PencilIcon className="size-6 fill-palette3" />
