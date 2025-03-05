@@ -4,6 +4,7 @@ import { useAuthUser } from '../hooks/useAuthUser';
 
 const PostEditDropDown = ({ post, deletePost }) => {
   const { user } = useAuthUser();
+  const navigate = useNavigate();
 
   return (
     user?.id === post.users_id && (
@@ -30,7 +31,8 @@ const PostEditDropDown = ({ post, deletePost }) => {
               onClick={async () => {
                 const confirmed = window.confirm('정말 삭제하시겠습니까?');
                 if (confirmed) {
-                  await deletePost();
+                  const success = await deletePost(post.posts_id);
+                  navigate('/');
                 }
               }}
               className="group flex w-full items-center gap-3 rounded-lg py-2 px-4 hover:bg-gray-100"

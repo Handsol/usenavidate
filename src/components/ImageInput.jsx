@@ -1,8 +1,11 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import supabase from '../supabase/Client';
+import { useAuthUser } from '../hooks/useAuthUser';
+import { AlertInfo } from '../common/Alert';
 
 export const ImageInput = ({ setPublicUrl }) => {
-  const [showImage, setShowImage] = useState(null);
+  const { user } = useAuthUser();
+  const [showImage, setShowImage] = useState(user?.user_metadata.users_avatar);
   const [uploadAvatar, setUploadAvatar] = useState('');
   const fileInputRef = useRef(null);
 
@@ -13,14 +16,32 @@ export const ImageInput = ({ setPublicUrl }) => {
     setUploadAvatar(avatar_image);
   };
 
+  useEffect(() => {
+    const getUser = async () => {
+      const {
+        data: { user }
+      } = await supabase.auth.getUser();
+      const { avatarData, error } = await supabase
+        .from('users')
+        .select('users_avatar')
+        .eq('users_id', user.id)
+        .single();
+
+      setShowImage(avatarData);
+    };
+    getUser();
+  }, []);
+
   const handleUploadImage = async () => {
-    const { data, error } = await supabase.storage
+    const { data: imageData, error } = await supabase.storage
       .from('profile-images')
       .upload(`public/avatar/${crypto.randomUUID()}`, uploadAvatar);
-
-    setPublicUrl(`https://yaaahfifliqyixbtxbjn.supabase.co/storage/v1/object/public/profile-images//${data.path}`);
-
-    const { data: userData } = await supabase.from('users').eq('users_id', userId).update('').select();
+    if (!error) {
+      AlertInfo('이미지 업로드 완료');
+      setPublicUrl(
+        `https://yaaahfifliqyixbtxbjn.supabase.co/storage/v1/object/public/profile-images//${imageData.path}`
+      );
+    }
   };
 
   return (
@@ -31,7 +52,7 @@ export const ImageInput = ({ setPublicUrl }) => {
         <div className="bg-slate-300" />
       </label>
       {/* 업로드한 이미지가 존재할 때 이미지 미리보기 생성 */}
-      {showImage !== null ? (
+      {user?.user_metadata.avatar !== null ? (
         <div className="bg-cover w-80 h-80">
           <img src={showImage} />
           {/* <button onClick={() => handleDeleteImage()}>삭제</button> */}

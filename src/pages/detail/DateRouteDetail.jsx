@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import supabase from '../../supabase/Client';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import UseKakaoLoader from '../../components/UseKakaoLoader';
+import PostEditDropDown from '../../components/PostEditDropdown';
+import { AlertSuccess } from '../../common/Alert';
 
 const DateRouteDetail = () => {
   // 현재 URL에서 id값 가져오기 (게시물 불러오기)
@@ -21,6 +23,8 @@ const DateRouteDetail = () => {
   const [mapCenter, setMapCenter] = useState({ lat: 37.546416, lng: 127.045646 });
   // 지도에 표시할 마커들의 좌표 리스트 저장
   const [markers, setMarkers] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPostDetail = async () => {
@@ -105,12 +109,27 @@ const DateRouteDetail = () => {
       });
     });
   };
+  // 게시글 삭제 함수
+  const deletePost = async () => {
+    // posts, posts_photos, posts_locations, posts_tag 등 연관된 데이터 삭제 필요시 추가 구현 가능
+    const { error } = await supabase.from('posts').delete().eq('posts_id', id);
+    if (error) {
+      console.error('게시글 삭제 오류:', error);
+      AlertError('게시글 삭제에 실패했습니다.');
+    } else {
+      AlertSuccess('게시글이 삭제되었습니다.');
+      navigate('/'); // 삭제 후 홈이나 목록 페이지로 이동
+    }
+  };
 
   if (loading) return <div>로딩 중...</div>;
   if (!post) return <div>게시물을 찾을 수 없습니다.</div>;
 
   return (
     <div className="flex flex-col h-[100vh] max-w-[1000px] mx-auto bg-palette4 gap-4 p-4">
+      <div className="flex justify-end items-center ">
+        <PostEditDropDown post={post} deletePost={deletePost} />
+      </div>
       <p className="flex mt-10 text-2xl font-semibold text-palette1">Location</p>
 
       <div className="text-2xl font-semibold text-left ">
