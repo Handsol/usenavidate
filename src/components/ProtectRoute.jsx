@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { PATH } from '../shared/PATH';
 import { useEffect } from 'react';
-import { AlertInfo, AlertError } from '../common/Alert';
+import { AlertError, AlertInfo } from '../common/Alert';
 import { useAuthUser } from '../hooks/useAuthUser';
 
 const ProtectRoute = ({ children }) => {
