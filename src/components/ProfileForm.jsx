@@ -53,7 +53,7 @@ const ProfileForm = () => {
   };
 
   return (
-    <>
+    <div className="flex flex-row justify-around">
       <ImageInput setPublicUrl={setPublicUrl} />
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col text-palette6 w-full p-4">
@@ -84,7 +84,7 @@ const ProfileForm = () => {
           </button>
         </div>
       </form>
-    </>
+    </div>
   );
 };
 

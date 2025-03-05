@@ -4,7 +4,8 @@ import { useAuthUser } from '../hooks/useAuthUser';
 import { AlertInfo } from '../common/Alert';
 
 export const ImageInput = ({ setPublicUrl }) => {
-  const [showImage, setShowImage] = useState(null);
+  const { user } = useAuthUser();
+  const [showImage, setShowImage] = useState(user?.user_metadata.users_avatar);
   const [uploadAvatar, setUploadAvatar] = useState('');
   const fileInputRef = useRef(null);
 
@@ -15,9 +16,21 @@ export const ImageInput = ({ setPublicUrl }) => {
     setUploadAvatar(avatar_image);
   };
 
-  const { user } = useAuthUser();
+  useEffect(() => {
+    const getUser = async () => {
+      const {
+        data: { user }
+      } = await supabase.auth.getUser();
+      const { avatarData, error } = await supabase
+        .from('users')
+        .select('users_avatar')
+        .eq('users_id', user.id)
+        .single();
 
-  console.log(user);
+      setShowImage(avatarData);
+    };
+    getUser();
+  }, []);
 
   const handleUploadImage = async () => {
     const { data: imageData, error } = await supabase.storage
