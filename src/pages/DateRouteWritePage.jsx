@@ -6,6 +6,7 @@ import supabase from '../supabase/Client';
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions, Transition } from '@headlessui/react';
 import useSelectFilters, { ageGroups, relations, locations, costOptions } from '../data/categoryData';
 import { Fragment } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const DateRouteWritePage = () => {
   // useSelectFilters 훅을 사용하여 필터 상태 및 업데이트 함수를 가져옴
@@ -40,6 +41,7 @@ const DateRouteWritePage = () => {
   const [selectedImages, setSelectedImages] = useState([]);
   // 이미지 미리보기
   const [imagePreviews, setImagePreviews] = useState([]);
+  const navigate = useNavigate();
 
   // Kakao Maps SDK가 로드되었는지 체크하는 함수
   const checkKakaoLoaded = () => {
@@ -149,6 +151,7 @@ const DateRouteWritePage = () => {
       }
 
       AlertSuccess('게시글이 성공적으로 등록되었습니다!');
+      navigate('/');
     } catch (error) {
       AlertError(`등록 실패: ${error.message}`);
     }
