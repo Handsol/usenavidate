@@ -1,6 +1,10 @@
 # useNaviDate( )
 
-**useNaviDate( ) 는 사용자를 위한 데이트 코스 추천 사이트입니다.**</br>연인 뿐 아니라 친구, 가족 등 가까운, 혹은 가까워질 사람들과 기분 좋은 하루를 보낼 수 있는 최적의 루트를 추천해드려요! 물론 직접 추천하는 것도 가능합니다 😊
+**useNaviDate( ) 는 사용자를 위한 데이트 코스 추천 사이트입니다.**</br>
+연인 뿐 아니라 친구, 가족 등 가까운, 혹은 가까워질 사람들과 기분 좋은 하루를 보낼 수 있는 최적의 루트를 추천해드려요! <br>
+물론 직접 추천하는 것도 가능합니다 😊
+
+<br>
 
 ✅ 홈화면(useNaviDate()) – 사용자가 직접 등록할 수 있는 데이트 루트 추천 페이지예요.<br>
 ✅ 커뮤니티(NaviTalk) – 추천 루트를 사용해본 사용자들의 후기를 한곳에서!<br>
@@ -11,35 +15,29 @@
 
 ### 내 손으로 직접 만드는 맞춤형 데이트 코스 추천 & 리뷰 플랫폼, useNaviDate!
 
-### [프로젝트 URL 바로가기 💻](https://news-feed-site.vercel.app/)
+<br>
+
+### [프로젝트 URL 바로가기 💻](https://usenavidate.vercel.app/)
 
 <br>
 
 ## 프로젝트 미리보기👑
 
-- Home
-  <img width="700" alt="Image" src="https://github.com/user-attachments/assets/48ef1d6d-95c6-406d-82a6-b0cc6a82d6b4" />
+- useNaviDate </br></br>
+  <img width="700" alt="Image" src="https://i.imgur.com/WEupeEV.png" />
+  
+- 상세페이지 </br></br>
+  <img width="700" alt="Image" src="https://i.imgur.com/8HNDdku.png" />
+  
+- 회원가입 / 로그인 </br></br>
+  <img width="700" alt="Image" src="https://imgur.com/FB6sLNv.png" />
+  
+- 커뮤니티 보드 </br></br>
+  <img width="700" alt="Image" src="https://i.imgur.com/4bwXAoj.png" />
+  
+- 주소 검색으로 게시글 작성 </br></br>
+  <img width="700" alt="Image" src="https://i.imgur.com/89RXqwt.png" />
 
-- My Page
-  <img width="700" alt="Image" src="https://github.com/user-attachments/assets/5430333d-808f-4a36-be82-9ec3d85a0c12" />
-
-- useNaviDate
-  <img width="700" alt="Image" src="https://github.com/user-attachments/assets/a7ce0e7b-2cc2-4626-a24e-2af416599007" />
-
-- NaviTalk
-  <img width="700" alt="Image" src="https://github.com/user-attachments/assets/6ea2841a-b269-470a-ac03-895804de5fa0" />
-
-- Profile
-  <img width="700" alt="Image" src="https://github.com/user-attachments/assets/6a3cd40c-40e7-4ac1-97ee-063079f12fdf" />
-
-- Alert
-  <img width="700" alt="Image" src="https://github.com/user-attachments/assets/6a3cd40c-40e7-4ac1-97ee-063079f12fdf" />
-
-- Signup
-  <img width="700" alt="Image" src="https://github.com/user-attachments/assets/6a3cd40c-40e7-4ac1-97ee-063079f12fdf" />
-
-- Login
-  <img width="700" alt="Image" src="https://github.com/user-attachments/assets/6a3cd40c-40e7-4ac1-97ee-063079f12fdf" />
 
 <br><br>
 
@@ -53,7 +51,8 @@
 가족과의 여행, 친구와의 나들이 장소를 정하기 힘들다면?</br>
 **useNaviDate** 는 여러분이 직접 경험한 최고의 데이트 코스를 추천하고 공유할 수 있는 플랫폼입니다.
 
-🎨 전시회, 🍿 영화관, 🍽️ 맛집, ☕ 카페 등 다양한 장소를 조합하여 **나만의 데이트 코스**를 등록하고, 다른 사용자가 공유한 데이트 코스를 확인하고, **직접 다녀온 후기를 남길 수 있는 커뮤니티 기능**까지 제공합니다.
+🎨 전시회, 🍿 영화관, 🍽️ 맛집, ☕ 카페 등 다양한 장소를 조합하여 **나만의 데이트 코스**를 등록하고, 다른 사용자가 공유한 데이트 코스를 확인하고, <br>
+**직접 다녀온 후기를 남길 수 있는 커뮤니티 기능**까지 제공합니다.
 
 이제 데이트 코스를 고민하지 말고, **useNaviDate()** 에서 가장 로맨틱한 순간을 계획해보세요!
 
