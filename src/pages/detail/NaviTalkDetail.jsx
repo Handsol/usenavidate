@@ -14,7 +14,10 @@ const NaviTalkDetail = () => {
   };
 
   // 게시글의 이미지 URL을 저장할 배열
-  const imageUrls = post?.posts_img_url?.length > 0 ? [...post.posts_img_url] : ['/navi_talk_default.png'];
+  const imageUrls =
+    Array.isArray(post?.posts_img_url) && post.posts_img_url.length > 0
+      ? [...post.posts_img_url]
+      : ['/navi_talk_default.png'];
 
   // 이미지가 5개 미만일 경우 default 이미지 추가
   while (imageUrls.length < 5) {
@@ -27,8 +30,6 @@ const NaviTalkDetail = () => {
   if (!post) {
     return <div>게시물을 찾을 수 없습니다.</div>;
   }
-
-  console.log('주소 불러와지나요? ', locations);
 
   return (
     <div className="flex flex-col h-[100vh] max-w-[1000px] mx-auto bg-palette4 gap-4">
@@ -57,6 +58,7 @@ const NaviTalkDetail = () => {
           ))}
         </Map>
       </div>
+
       {/* 사진 첨부 */}
       <div className="flex flex-row w-full h-[170px] justify-between">
         {imageUrls.slice(0, 5).map((img, index) => (
@@ -65,6 +67,7 @@ const NaviTalkDetail = () => {
           </div>
         ))}
       </div>
+
       {/* 장소 설명 */}
       <section className="flex flex-col gap-5">
         <div className="flex flex-row justify-between gap-2">
