@@ -69,12 +69,14 @@ const useFetchPostDetail = (postId) => {
       // 이미지 가져오기
       const { data: photosData, error: photosError } = await supabase
         .from('posts_photos')
-        .select('posts_id, posts_img_url')
+        .select('posts_img_url')
         .eq('posts_id', postId);
 
       if (photosError) {
         console.error('이미지 불러오기 오류:', photosError);
       }
+
+      const imageUrls = photosData?.map((photo) => photo.posts_img_url) || [];
 
       // 장소 데이터 가져오기 (주소 + 가게이름)
       const { data: locData, error: locError } = await supabase
@@ -95,7 +97,8 @@ const useFetchPostDetail = (postId) => {
       // 최종 데이터 정리
       setPost({
         ...postData,
-        posts_img_url: photosData ? photosData.map((photo) => photo.posts_img_url) : []
+        posts_img_url: imageUrls,
+        posts_tags: postData.posts_tags ? postData.posts_tags.split(',') : [] // 태그 배열 변환
       });
 
       setLoading(false);
