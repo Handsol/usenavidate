@@ -8,6 +8,8 @@ const ProfileForm = ({ publicUrl }) => {
     users_nickname: ''
   });
 
+  console.log(publicUrl);
+
   // upsert (true) > 없는 파일이면 insert > 있는 파일이면 update
 
   useEffect(() => {
@@ -27,11 +29,7 @@ const ProfileForm = ({ publicUrl }) => {
     const updateUserData = async () => {
       const authData = JSON.parse(localStorage.getItem('session')).user;
       const userId = authData.id;
-      const { data: userData, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('users_id', userId)
-        .upsert({ users_nickname: formData, users_avatar: publicUrl });
+      const { data: userData, error } = await supabase.from('users').select('*').eq('users_id', userId).upsert();
 
       if (error) {
         console.error('오류 발생', error);

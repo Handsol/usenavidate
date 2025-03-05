@@ -1,5 +1,6 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import supabase from '../supabase/Client';
+import { useAuthUser } from '../supabase/SupabaseAuth';
 
 export const ImageInput = ({ setPublicUrl }) => {
   const [showImage, setShowImage] = useState(null);
@@ -13,14 +14,16 @@ export const ImageInput = ({ setPublicUrl }) => {
     setUploadAvatar(avatar_image);
   };
 
+  const { user, loading } = useAuthUser();
+
+  if (loading) return null;
+
   const handleUploadImage = async () => {
     const { data, error } = await supabase.storage
       .from('profile-images')
       .upload(`public/avatar/${crypto.randomUUID()}`, uploadAvatar);
 
     setPublicUrl(`https://yaaahfifliqyixbtxbjn.supabase.co/storage/v1/object/public/profile-images//${data.path}`);
-
-    const { data: userData } = await supabase.from('users').eq('users_id', userId).update('').select();
   };
 
   return (
@@ -31,7 +34,7 @@ export const ImageInput = ({ setPublicUrl }) => {
         <div className="bg-slate-300" />
       </label>
       {/* 업로드한 이미지가 존재할 때 이미지 미리보기 생성 */}
-      {showImage !== null ? (
+      {user?.user_metadata.avatar !== null ? (
         <div className="bg-cover w-80 h-80">
           <img src={showImage} />
           {/* <button onClick={() => handleDeleteImage()}>삭제</button> */}
